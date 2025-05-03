@@ -1,0 +1,29 @@
+// homepage.component.scss
+
+.homepage {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  app-header {
+    margin-bottom: 20px;
+  }
+
+  app-filter {
+    margin-bottom: 30px;
+  }
+
+  .house-listing-container {
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    app-header,
+    app-filter {
+      margin-bottom: 15px;
+    }
+  }
+}

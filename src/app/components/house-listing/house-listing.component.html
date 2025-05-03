@@ -1,0 +1,55 @@
+<div class="d-flex justify-content-between align-items-center">
+  <app-filter></app-filter>
+  @if (isLoggedIn) {
+    <button class="btn-primary" (click)="createHouse()">Create</button>
+  }
+</div>
+<div class="house-listing">
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+  <div *ngIf="errorModel || errorHouse" class="error">
+    Error: {{ (errorModel || errorHouse) | json }}
+  </div>
+
+  <!-- House Models List -->
+  <div class="house-models">
+    <div *ngFor="let model of houseModels" class="model-item" (click)="selectModel(model)" #modelItem>
+      <span>{{ model.model }} house type</span>
+    </div>
+  </div>
+
+  <!-- Selected Model Details -->
+  <div *ngIf="selectedModel && showDetails" class="model-details">
+    <h2>{{ selectedModel.media?.title || 'No Title' }}</h2>
+    <p>{{ selectedModel.media?.description || 'No Description' }}</p>
+    <img [src]="selectedModel.media?.banner" alt="Model Banner" *ngIf="selectedModel.media?.banner" />
+
+    <!-- Houses Table -->
+    <table *ngIf="houses?.length; else noHouses">
+      <thead>
+      <tr>
+        <th>House Number</th>
+        <th>Block No</th>
+        <th>Land No</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let house of houses">
+        <td>{{ house.houseNumber }}</td>
+        <td>{{ house.blockNumber }}</td>
+        <td>{{ house.landNumber }}</td>
+        <td>{{ house.price | number }}</td>
+        <td>
+          @if (isLoggedIn) {
+            <button class="btn-primary" (click)="editHouse(house)">Edit</button>
+          }
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <ng-template #noHouses>
+      <p class="no-houses">No houses available for this model.</p>
+    </ng-template>
+  </div>
+</div>

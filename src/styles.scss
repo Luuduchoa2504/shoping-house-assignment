@@ -1,1 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+/* src/styles.css */
+:root {
+  --primary-color: #fe501f; /* Orange color from the mockup */
+  --text-color: #ffffff; /* White text for contrast */
+  --container-max-width: 1200px;
+}
+
+.container-global {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.header {
+  background-color: var(--primary-color);
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header__title {
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.header__auth-links,
+.header__account {
+  color: var(--text-color);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.header__auth-links a {
+  color: var(--text-color);
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.header__auth-links a:hover,
+.header__account:hover {
+  text-decoration: underline;
+}
+
+.filter-section {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.form-control {
+  max-width: 200px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  padding: 8px;
+}
+
+.house-list {
+  margin-top: 20px;
+}
+
+.table th {
+  background-color: #f8f9fa;
+}

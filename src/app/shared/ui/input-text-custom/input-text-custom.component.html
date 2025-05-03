@@ -1,0 +1,44 @@
+<!--&lt;!&ndash;<ng-container>&ndash;&gt;-->
+<!--  <div class="position-relative">-->
+<!--    <bb-input-text-ui-->
+<!--      class="w-100"-->
+<!--      [label]="config.label + (config.isRequired ? ' *' : '')"-->
+<!--      [formControl]="config.formControl"-->
+<!--      [placeholder]="config.placeholder"-->
+<!--      [maxLength]="config.maxLength"-->
+<!--      [minLength]="config.minLength"-->
+<!--      [numbersOnly]="config.numbersOnly || false"-->
+<!--      [bbInputPercent]="config.percentageInput || false"-->
+<!--    ></bb-input-text-ui>-->
+<!--    <span *ngIf="config.isHaveSuffix" class="input-unit">{{ config.suffixValue }}</span>-->
+<!--  </div>-->
+<!--&lt;!&ndash;</ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<ng-template #textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;  <bb-textarea-ui&ndash;&gt;-->
+<!--&lt;!&ndash;    [label]="config.label + (config.isRequired ? ' *' : '')"&ndash;&gt;-->
+<!--&lt;!&ndash;    [formControl]="config.formControl"&ndash;&gt;-->
+<!--&lt;!&ndash;    [placeholder]="config.placeholder"&ndash;&gt;-->
+<!--&lt;!&ndash;    [maxLength]="config.maxLength"&ndash;&gt;-->
+<!--&lt;!&ndash;    rows="3"&ndash;&gt;-->
+<!--&lt;!&ndash;  ></bb-textarea-ui>&ndash;&gt;-->
+<!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
+
+<!--<span class="fs-small color-hint" *ngIf="config.maxLength">-->
+<!--  {{ config.formControl?.value?.length || 0 }}/{{ config.maxLength }}-->
+<!--</span>-->
+
+<!--<bb-input-validation-message-ui-->
+<!--  [showErrors]="config.isShowError && !(config.formControl?.valid || config.formControl?.untouched)"-->
+<!--&gt;-->
+<!--  <span *ngIf="config.formControl.errors?.required">-->
+<!--    {{ config.label | toRequired }}-->
+<!--  </span>-->
+<!--  <span *ngIf="config.formControl.errors?.maxlength">-->
+<!--    Vui lòng nhập tối đa {{ config.maxLength }} ký tự-->
+<!--  </span>-->
+<!--  <span *ngIf="config.formControl.errors?.minlength">-->
+<!--    Vui lòng nhập ít nhất {{ config.minLength }} ký tự-->
+<!--  </span>-->
+<!--  <ng-content select="[errorMsg]"></ng-content>-->
+<!--</bb-input-validation-message-ui>-->
