@@ -5,7 +5,7 @@ export class House {
   blockNumber?: number;
   landNumber?: number;
   houseType?: string;
-  model?: HouseModel
+  model?: HouseModel;
 
   constructor(object = {} as House) {
     Object.assign(this, object);

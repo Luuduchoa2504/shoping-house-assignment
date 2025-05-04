@@ -51,3 +51,36 @@
     }
   }
 }
+
+.filter-section {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .form-control {
+    &.compact {
+      min-width: 80px;
+      width: auto;
+      padding: 6px 8px;
+      font-size: 14px;
+
+      &[type="number"] {
+        width: 100px;
+      }
+    }
+  }
+
+  .btn-reset {
+    padding: 6px 12px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+}
