@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { HouseService } from '../../services/house/house.service';
 import { House, HouseModel } from '../../models/house.model';
-import { catchError, finalize, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 
 export interface HouseState {
   isLoading: boolean;
@@ -11,7 +11,6 @@ export interface HouseState {
   houseListSuccess: House[];
   errorHouseList: unknown;
   selectedModel: HouseModel | null;
-  selectedModelHouses: House[];
 }
 
 const defaultState: HouseState = {
@@ -21,7 +20,6 @@ const defaultState: HouseState = {
   houseListSuccess: [],
   errorHouseList: null,
   selectedModel: null,
-  selectedModelHouses: [],
 };
 
 @Injectable()
@@ -37,9 +35,41 @@ export class HomepageState extends ComponentStore<HouseState> {
   readonly houseModelListSuccess$ = this.select(({ houseModelListSuccess }) => houseModelListSuccess);
   readonly houseListSuccess$ = this.select(({ houseListSuccess }) => houseListSuccess);
   readonly selectedModel$ = this.select(({ selectedModel }) => selectedModel);
-  readonly selectedModelHouses$ = this.select(({ selectedModelHouses }) => selectedModelHouses);
   readonly errorHouseModelList$ = this.select(({ errorHouseModelList }) => errorHouseModelList);
   readonly errorHouseList$ = this.select(({ errorHouseList }) => errorHouseList);
+
+  // Computed selector for filtered houses
+  // In HomepageState
+  // In HomepageState
+  readonly selectModel = this.updater((state, model: HouseModel) => {
+    console.log('Selecting model:', model);
+    return {
+      ...state,
+      selectedModel: model
+    };
+  });
+
+  readonly selectedModelHouses$ = this.select(
+    this.selectedModel$,
+    this.houseListSuccess$,
+    (selectedModel, houses) => {
+      console.log('Filtering - Selected Model:', selectedModel);
+      console.log('Filtering - All Houses:', houses);
+      if (!selectedModel?.id) {
+        console.log('No selected model ID');
+        return [];
+      }
+
+      const filtered = houses.filter(house => {
+        const match = house.model?.id === selectedModel.id;
+        console.log(`House ${house.id} match:`, match);
+        return match;
+      });
+
+      console.log('Filtered Houses:', filtered);
+      return filtered;
+    }
+  );
 
   // Effects
   readonly loadHouseModelList = this.effect((trigger$: Observable<void>) =>
@@ -61,8 +91,7 @@ export class HomepageState extends ComponentStore<HouseState> {
               isLoading: false,
             });
             return of([]);
-          }),
-          finalize(() => this.patchState({ isLoading: false }))
+          })
         )
       )
     )
@@ -87,54 +116,17 @@ export class HomepageState extends ComponentStore<HouseState> {
               isLoading: false,
             });
             return of([]);
-          }),
-          finalize(() => this.patchState({ isLoading: false }))
+          })
         )
       )
     )
   );
 
-  readonly loadHousesForSelectedModel = this.effect((trigger$: Observable<void>) =>
-    trigger$.pipe(
-      tap(() => this.patchState({ isLoading: true })),
-      switchMap(() => {
-        const state = this.get();
-        const selectedModel = state.selectedModel;
-        const houses = state.houseListSuccess; // Use already loaded houses
-        console.log('Selected Model:', selectedModel?.model);
-        console.log('All Houses:', houses);
-        if (!selectedModel || !selectedModel.model || !houses) {
-          this.patchState({
-            selectedModelHouses: [],
-            isLoading: false,
-          });
-          return of([]);
-        }
-
-        const filteredHouses = houses.filter((house) => house.model?.model === selectedModel.model);
-        console.log('Filtered Houses:', filteredHouses);
-        this.patchState({
-          selectedModelHouses: filteredHouses,
-          errorHouseList: null,
-          isLoading: false,
-        });
-        return of(filteredHouses);
-      }),
-      catchError((error) => {
-        this.patchState({
-          selectedModelHouses: [],
-          errorHouseList: error,
-          isLoading: false,
-        });
-        return of([]);
-      }),
-      finalize(() => this.patchState({ isLoading: false }))
-    )
-  );
-
   // Updater for selecting a model
-  readonly selectModel = this.updater((state, model: HouseModel) => ({
-    ...state,
-    selectedModel: model,
-  }));
+  // readonly selectModel = this.updater((state, model: HouseModel) => ({
+  //   ...state,
+  //   selectedModel: model,
+  // }));
+
+  // Effect to trigger house filtering (no longer needed as we use computed selector)
 }

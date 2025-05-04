@@ -32,8 +32,8 @@ export class HouseListingComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
+  // In HouseListingComponent
   ngOnInit(): void {
-    // Always subscribe to getUserInfo() to check login status
     this.authSubscription = this.authService.getUserInfo().subscribe((userInfo) => {
       const userInfoFromStorage = localStorage.getItem('userInfo');
       if (userInfo && userInfo.username) {
@@ -43,14 +43,17 @@ export class HouseListingComponent implements OnInit, OnDestroy {
         this.isLoggedIn = false;
         localStorage.removeItem('userInfo');
       } else {
-        this.isLoggedIn = true; // Use localStorage if authService returns null but data exists
+        this.isLoggedIn = true;
       }
     });
 
-    // Initial check from localStorage
     const userInfo = localStorage.getItem('userInfo');
     if (userInfo) {
       this.isLoggedIn = true;
+    }
+
+    if (this.selectedModel) {
+      this.showDetails = true;
     }
   }
 
@@ -61,17 +64,13 @@ export class HouseListingComponent implements OnInit, OnDestroy {
   }
 
   selectModel(model: HouseModel) {
-    if (this.selectedModel && this.selectedModel.model === model.model) {
+    if (this.selectedModel?.id === model.id) {
       this.showDetails = !this.showDetails;
     } else {
       this.selectedModel = model;
       this.showDetails = true;
-      this.modelSelected.emit(model);
     }
-
-    this.modelItems.forEach(item => item.nativeElement.classList.remove('active'));
-    const selectedItem = this.modelItems.find(item => item.nativeElement.textContent?.includes(model.model));
-    if (selectedItem) selectedItem.nativeElement.classList.add('active');
+    this.modelSelected.emit(model);
   }
 
   editHouse(house: House) {

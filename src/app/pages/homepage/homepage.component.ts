@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HomepageState } from './homepage.state';
 import { House, HouseModel } from '../../models/house.model';
 import { Observable } from 'rxjs';
-import {HouseListingComponent} from '../../components/house-listing/house-listing.component';
-import {HeaderComponent} from '../../components/header/header.component';
-import {FilterComponent} from '../../components/filter/filter.component';
-import { CommonModule} from '@angular/common';
+import { HouseListingComponent } from '../../components/house-listing/house-listing.component';
+import { HeaderComponent } from '../../components/header/header.component';
+import { FilterComponent } from '../../components/filter/filter.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-homepage',
@@ -44,6 +44,5 @@ export class HomepageComponent implements OnInit {
 
   onModelSelected(model: HouseModel) {
     this.homepageState.selectModel(model);
-    this.homepageState.loadHousesForSelectedModel();
   }
 }

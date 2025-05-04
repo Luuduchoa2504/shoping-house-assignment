@@ -13,6 +13,7 @@ export class House {
 }
 
 export class HouseModel {
+  id?: string;
   model?: string;
   media?: HouseMedia;
 
@@ -31,3 +32,4 @@ export class HouseMedia {
     Object.assign(this, object);
   }
 }
+

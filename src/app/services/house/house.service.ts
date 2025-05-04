@@ -119,38 +119,48 @@ export class HouseService {
   }
 
   // GET /house_models - Fetch list of house models
+      // return this.http.get<any>(`${this.apiUrl}/house_models`, { headers: this.getHeaders() }).pipe(
   getHouseModelsList(): Observable<HouseModel[]> {
     return of(dummyHouseModelsResponse).pipe(
-      // return this.http.get<any>(`${this.apiUrl}/house_models`, { headers: this.getHeaders() }).pipe(
       map(response => {
-        if (response && response.data) {
-          return response.data.map((item: any) => new HouseModel({
-            model: item.attributes.model,
-            media: new HouseMedia(item.attributes.media)
-          }));
-        }
-        return [];
+        return response.data.map((item: any) => {
+          const model = new HouseModel();
+          model.id = item.id;
+          model.model = item.attributes.model;
+          model.media = new HouseMedia(item.attributes.media);
+          return model;
+        });
       })
     );
   }
 
   // GET /houses - Fetch list of houses
+      // return this.http.get<any>(`${this.apiUrl}/houses`, { headers: this.getHeaders() }).pipe(
+  // In HouseService
+  // In HouseService
   getListHouses(): Observable<House[]> {
     return of(dummyHousesResponse).pipe(
-      // return this.http.get<any>(`${this.apiUrl}/houses`, { headers: this.getHeaders() }).pipe(
       map(response => {
-        if (response && response.data) {
-          return response.data.map((item: any) => new House({
+        return response.data.map((item: any) => {
+          // Find matching model from house models
+          const modelData = dummyHouseModelsResponse.data.find(m =>
+            m.attributes.model === item.attributes.model
+          );
+
+          const model = new HouseModel();
+          model.id = modelData?.id || '';
+          model.model = item.attributes.model;
+
+          return new House({
             id: item.id,
             houseNumber: item.attributes.house_number,
             price: item.attributes.price,
             blockNumber: item.attributes.block_number,
             landNumber: item.attributes.land_number,
             houseType: item.attributes.house_type,
-            model: new HouseModel({ model: item.attributes.model })
-          }));
-        }
-        return [];
+            model: model
+          });
+        });
       })
     );
   }

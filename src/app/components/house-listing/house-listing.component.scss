@@ -1,173 +1,166 @@
-// house-listing.component.scss (unchanged)
 @import '../../../themes/scss/variables';
 
-.house-listing {
-  // Loading and error states
-  .loading,
-  .error {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header-container {
+  margin-bottom: 30px;
+
+  h1 {
+    color: $orange-color;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
-  .loading {
-    background-color: $loading-bg;
-    color: $text-color;
-  }
-
-  .error {
-    background-color: $error-bg;
-    color: $error-color;
-  }
-
-  // House Models List
-  .house-models {
+  .filter-container {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+    align-items: center;
+
+    .filter-component {
+      flex-grow: 1;
+    }
+
+    .btn-primary {
+      white-space: nowrap;
+      padding: 8px 20px;
+    }
+  }
+}
+
+.model-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.model-item {
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  .model-header {
+    padding: 15px;
+    font-weight: 500;
+  }
+
+  &.active {
+    border-color: $orange-color;
+    box-shadow: 0 2px 8px rgba($orange-color, 0.1);
+
+    .model-header {
+      background-color: lighten($orange-color, 40%);
+      border-radius: 8px 8px 0 0;
+    }
+  }
+}
+
+.expanded-content {
+  padding: 15px;
+  border-top: 1px solid $border-color;
+
+  .media-container {
+    display: flex;
+    gap: 30px;
     margin-bottom: 20px;
 
-    .model-item {
-      padding: 10px 15px;
-      border: 1px solid $border-color;
-      border-radius: 4px;
-      cursor: pointer;
-      background-color: $background-color;
-      width: auto;
-      min-width: 200px;
-      white-space: normal;
-      word-wrap: break-word;
+    .text-content {
+      flex: 1;
 
-      &:hover {
-        background-color: lighten($background-color, 5%);
+      h2 {
+        color: $orange-color;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
       }
 
-      &.active {
-        background-color: lighten($primary-color, 40%);
-        border-color: $primary-color;
+      p {
+        color: lighten($text-color, 20%);
+        line-height: 1.6;
       }
+    }
 
-      span {
-        margin: 0;
-        color: $text-color;
+    .image-content {
+      flex: 1;
+      max-width: 400px;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
     }
   }
 
-  // Selected Model Details
-  .model-details {
-    margin-top: 20px;
+  .house-table {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
 
-    h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
-      color: $text-color;
-    }
+      thead {
+        background-color: $orange-color;
 
-    p {
-      margin-bottom: 15px;
-      color: lighten($text-color, 20%);
-      line-height: 1.5;
-    }
-
-    img {
-      max-width: 300px;
-      height: auto;
-      border-radius: 4px;
-      margin-bottom: 15px;
-    }
-  }
-
-  // Houses Table
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-
-    thead {
-      background-color: $background-color;
-
-      th {
-        padding: 10px;
-        text-align: left;
-        border: 1px solid $border-color;
-        font-weight: 600;
-        color: $text-color;
-      }
-    }
-
-    tbody {
-      tr {
-        &:nth-child(even) {
-          background-color: $background-color;
+        th {
+          padding: 12px;
+          color: white;
+          text-align: left;
+          font-weight: 500;
         }
+      }
+
+      tbody tr {
+        border-bottom: 1px solid $border-color;
 
         td {
-          padding: 8px;
-          border: 1px solid $border-color;
-          color: darken($text-color, 10%);
+          padding: 12px;
+          color: $text-color;
 
           &:last-child {
             text-align: center;
-
-            .btn-primary {
-              padding: 5px 10px;
-              background-color: $orange-color;
-              color: white;
-              border: none;
-              border-radius: 4px;
-              cursor: pointer;
-
-              &:hover {
-                background-color: darken($orange-color, 10%);
-              }
-            }
           }
         }
       }
     }
   }
-
-  // No Houses Message
-  .no-houses {
-    padding: 10px;
-    color: lighten($text-color, 20%);
-  }
-
-  // Responsive design
-  @media (max-width: 768px) {
-    .house-models {
-      .model-item {
-        min-width: 100%;
-      }
-    }
-
-    table {
-      font-size: 14px;
-
-      th,
-      td {
-        padding: 6px;
-      }
-    }
-
-    .model-details img {
-      max-width: 100%;
-    }
-  }
 }
 
-// Custom button class
-.btn-primary {
-  background-color: $orange-color;
-  border-color: $orange-color;
-  color: #ffffff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.no-houses {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: lighten($text-color, 30%);
+  text-align: center;
+}
 
-  &:hover {
-    background-color: darken($orange-color, 10%);
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+
+    .btn-primary {
+      width: 100%;
+    }
+  }
+
+  .media-container {
+    flex-direction: column !important;
+
+    .image-content {
+      max-width: 100% !important;
+      order: -1;
+    }
+  }
+
+  .house-table {
+    overflow-x: auto;
+
+    table {
+      min-width: 600px;
+    }
   }
 }
