@@ -50,26 +50,15 @@ export class LoginFormComponent implements OnInit {
       confirmPasswordControl?.clearValidators();
       this.loginForm.clearValidators();
     }
-
-    // Ensure the form updates its validity
     confirmPasswordControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     passwordControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     this.loginForm.updateValueAndValidity({ emitEvent: false });
-
-    console.log('Validators updated', {
-      isSignUp: this.isSignUp,
-      usernameValidators: this.loginForm.get('username')?.validator,
-      passwordValidators: this.loginForm.get('password')?.validator,
-      confirmPasswordValidators: this.loginForm.get('confirmPassword')?.validator,
-      formValidators: this.loginForm.validator
-    });
   }
 
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
     if (control instanceof FormGroup) {
       const password = control.get('password')?.value;
       const confirmPassword = control.get('confirmPassword')?.value;
-      console.log('Password match check', { password, confirmPassword, match: password === confirmPassword });
       return password === confirmPassword ? null : { mismatch: true };
     }
     return null;
@@ -89,7 +78,6 @@ export class LoginFormComponent implements OnInit {
         return;
       }
       // Login mode
-      console.log('Login mode, calling API', { username, password });
       this.loginService.login(username, password).subscribe({
         next: (response) => {
           const token = response?.data?.attributes?.token; // Adjust based on actual API response

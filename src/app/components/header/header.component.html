@@ -1,8 +1,10 @@
 <div class="header">
   <div class="header__title">OIVAN HOUSE</div>
   @if(isLoggedIn) {
-    <div class="header__account" (click)="logout()">{{ accountLabel }}</div>
-    <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
+    <div class="d-flex justify-content-center align-item-center gap-2">
+      <div class="header__account" (click)="logout()">{{ accountLabel }}</div>
+      <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
+    </div>
   } @else {
     <div class="header__auth-links">
       <a (click)="navigateToLogin()">Sign In / Sign Up</a>

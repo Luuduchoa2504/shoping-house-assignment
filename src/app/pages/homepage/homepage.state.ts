@@ -38,11 +38,7 @@ export class HomepageState extends ComponentStore<HouseState> {
   readonly errorHouseModelList$ = this.select(({ errorHouseModelList }) => errorHouseModelList);
   readonly errorHouseList$ = this.select(({ errorHouseList }) => errorHouseList);
 
-  // Computed selector for filtered houses
-  // In HomepageState
-  // In HomepageState
   readonly selectModel = this.updater((state, model: HouseModel) => {
-    console.log('Selecting model:', model);
     return {
       ...state,
       selectedModel: model
@@ -53,20 +49,13 @@ export class HomepageState extends ComponentStore<HouseState> {
     this.selectedModel$,
     this.houseListSuccess$,
     (selectedModel, houses) => {
-      console.log('Filtering - Selected Model:', selectedModel);
-      console.log('Filtering - All Houses:', houses);
       if (!selectedModel?.id) {
-        console.log('No selected model ID');
         return [];
       }
-
       const filtered = houses.filter(house => {
         const match = house.model?.id === selectedModel.id;
-        console.log(`House ${house.id} match:`, match);
         return match;
       });
-
-      console.log('Filtered Houses:', filtered);
       return filtered;
     }
   );
@@ -121,12 +110,4 @@ export class HomepageState extends ComponentStore<HouseState> {
       )
     )
   );
-
-  // Updater for selecting a model
-  // readonly selectModel = this.updater((state, model: HouseModel) => ({
-  //   ...state,
-  //   selectedModel: model,
-  // }));
-
-  // Effect to trigger house filtering (no longer needed as we use computed selector)
 }

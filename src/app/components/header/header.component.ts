@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
-import {LoginService} from '../../services/login/login.service'; // Adjust path as needed
+import { LoginService } from '../../services/login/login.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -10,9 +11,10 @@ import {LoginService} from '../../services/login/login.service'; // Adjust path 
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   accountLabel: string = 'Account';
-  isLoggedIn = false;
+  isLoggedIn: boolean = false;
+  private userInfoSubscription: Subscription | undefined;
 
   constructor(
     private authService: AuthService,
@@ -21,35 +23,29 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Check if user is logged in via localStorage or authService
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      this.isLoggedIn = true;
-      this.accountLabel = JSON.parse(userInfo).username || 'Account';
-    } else {
-      this.authService.getUserInfo().subscribe((userInfo) => {
-        if (userInfo && userInfo.username) {
-          this.accountLabel = userInfo.username;
-          this.isLoggedIn = true;
-          localStorage.setItem('userInfo', JSON.stringify(userInfo));
-        }
-      });
+    this.userInfoSubscription = this.authService.getUserInfo().subscribe((userInfo) => {
+      if (userInfo && userInfo.username) {
+        this.isLoggedIn = true;
+        this.accountLabel = userInfo.username;
+      } else {
+        this.isLoggedIn = false;
+        this.accountLabel = 'Account';
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userInfoSubscription) {
+      this.userInfoSubscription.unsubscribe();
     }
   }
 
   logout() {
     this.loginService.logout();
-    localStorage.removeItem('userInfo');
-    this.isLoggedIn = false;
-    this.accountLabel = 'Account';
     this.router.navigate(['/']);
   }
 
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
-
-  // navigateToSignup() {
-  //   this.router.navigate(['/signup']);
-  // }
 }

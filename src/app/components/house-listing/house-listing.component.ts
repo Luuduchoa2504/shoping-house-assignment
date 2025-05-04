@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import {FilterComponent} from '../filter/filter.component';
+import { FilterComponent } from '../filter/filter.component';
 
 @Component({
   selector: 'app-house-listing',
@@ -32,25 +32,10 @@ export class HouseListingComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  // In HouseListingComponent
   ngOnInit(): void {
     this.authSubscription = this.authService.getUserInfo().subscribe((userInfo) => {
-      const userInfoFromStorage = localStorage.getItem('userInfo');
-      if (userInfo && userInfo.username) {
-        this.isLoggedIn = true;
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
-      } else if (!userInfoFromStorage) {
-        this.isLoggedIn = false;
-        localStorage.removeItem('userInfo');
-      } else {
-        this.isLoggedIn = true;
-      }
+      this.isLoggedIn = !!userInfo && !!userInfo.username;
     });
-
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      this.isLoggedIn = true;
-    }
 
     if (this.selectedModel) {
       this.showDetails = true;
