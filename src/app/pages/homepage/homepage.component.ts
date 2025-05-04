@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     HouseListingComponent,
     HeaderComponent,
-    FilterComponent,
   ],
   standalone: true,
   providers: [HomepageState],

@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="breadcrumb mb-4">
+    <a routerLink="/">House list</a> &gt; {{ id ? f['houseNumber'].value || 'House Number' : 'New House' }}
+  </div>
+
+  <h1 class="title">{{ f['houseNumber'].value || '[House number]' }}</h1>
+
+  <form class="house-form" [formGroup]="houseForm">
+    <div class="form-row">
+      <label>
+        House Number
+        <input type="text" formControlName="houseNumber" />
+        <div class="error" *ngIf="f['houseNumber'].touched && f['houseNumber'].errors">
+          <span *ngIf="f['houseNumber'].errors['required']">House number is required</span>
+          <span *ngIf="f['houseNumber'].errors['duplicate']">Your house number is already used</span>
+        </div>
+      </label>
+
+      <label>
+        Block number
+        <input type="text" formControlName="blockNumber" />
+        <div class="error" *ngIf="f['blockNumber'].touched && f['blockNumber'].errors?.['required']">
+          Block number is required
+        </div>
+      </label>
+
+      <label>
+        Land number
+        <input type="text" formControlName="landNumber" />
+        <div class="error" *ngIf="f['landNumber'].touched && f['landNumber'].errors?.['required']">
+          Land number is required
+        </div>
+      </label>
+
+      <label>
+        House type
+        <select formControlName="houseType">
+          <option>Apartment</option>
+          <option>Townhouse</option>
+          <option>Villa</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label>
+        House model
+        <select formControlName="houseModel">
+          <option>apartment-001</option>
+          <option>apartment-002</option>
+        </select>
+      </label>
+
+      <label>
+        Price
+        <input type="text" formControlName="price" />
+        <div class="error" *ngIf="f['price'].touched && f['price'].errors">
+          <span *ngIf="f['price'].errors['required']">Price is required</span>
+          <span *ngIf="f['price'].errors['pattern']">Only numbers and spaces allowed</span>
+        </div>
+      </label>
+
+      <label>
+        Status
+        <select formControlName="status">
+          <option>Available</option>
+          <option>Booked</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-actions mt-4">
+      <button type="button" class="btn btn-submit" [disabled]="houseForm.invalid" (click)="onCreateUpdate()">
+        {{ id ? 'Edit' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>

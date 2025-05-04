@@ -60,13 +60,15 @@ export class HouseListingComponent implements OnInit, OnDestroy {
 
   editHouse(house: House) {
     if (this.isLoggedIn) {
-      this.router.navigate(['/edit-house', house.id]);
+      this.router.navigate(['/detail', house.id], {
+        state: { house }
+      });
     }
   }
 
   createHouse() {
     if (this.isLoggedIn) {
-      this.router.navigate(['/create-house']);
+      this.router.navigate(['/create']);
     }
   }
 }
