@@ -1,17 +1,17 @@
 <div class="container-global">
   <div class="filter-section">
-    <input type="text" class="form-control" placeholder="House Number" [(ngModel)]="filterHouseNumber" (ngModelChange)="applyFilters()">
-    <select class="form-control" [(ngModel)]="filterBlock" (ngModelChange)="applyFilters()">
-      <option value="">Block Number</option>
+    <input type="text" class="form-control compact" placeholder="House No" [(ngModel)]="filterHouseNumber" (ngModelChange)="applyFilters()">
+    <select class="form-control compact" [(ngModel)]="filterBlock" (ngModelChange)="applyFilters()">
+      <option value="">Block</option>
       <option value="A">A</option>
       <option value="B">B</option>
     </select>
-    <select class="form-control" [(ngModel)]="filterLand" (ngModelChange)="applyFilters()">
-      <option value="">Land Number</option>
+    <select class="form-control compact" [(ngModel)]="filterLand" (ngModelChange)="applyFilters()">
+      <option value="">Land</option>
       <option value="01">01</option>
       <option value="02">02</option>
     </select>
-    <input type="number" class="form-control" placeholder="Min Price" [(ngModel)]="minPrice" (ngModelChange)="applyFilters()">
-    <input type="number" class="form-control" placeholder="Max Price" [(ngModel)]="maxPrice" (ngModelChange)="applyFilters()">
+    <input type="number" class="form-control compact" placeholder="Min $" [(ngModel)]="minPrice" (ngModelChange)="applyFilters()">
+    <input type="number" class="form-control compact" placeholder="Max $" [(ngModel)]="maxPrice" (ngModelChange)="applyFilters()">
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {Component, Output, EventEmitter, Input} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -10,13 +10,21 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent {
+  @Input() filterHouseNumber: string = '';
+  @Input() filterBlock: string = '';
+  @Input() filterLand: string = '';
+  @Input() minPrice: number | null = null;
+  @Input() maxPrice: number | null = null;
+
+  @Output() filterChange = new EventEmitter<void>();
+  @Output() resetFilters = new EventEmitter<void>();
   @Output() filterChanged = new EventEmitter<any>();
 
-  filterHouseNumber = '';
-  filterBlock = '';
-  filterLand = '';
-  minPrice = 0;
-  maxPrice = 0;
+  // filterHouseNumber = '';
+  // filterBlock = '';
+  // filterLand = '';
+  // minPrice = 0;
+  // maxPrice = 0;
 
   applyFilters() {
     this.filterChanged.emit({
@@ -26,5 +34,13 @@ export class FilterComponent {
       minPrice: this.minPrice,
       maxPrice: this.maxPrice
     });
+  }
+
+  onInputChange() {
+    this.filterChange.emit();
+  }
+
+  onReset() {
+    this.resetFilters.emit();
   }
 }

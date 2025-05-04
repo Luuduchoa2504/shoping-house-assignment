@@ -3,7 +3,7 @@
     <div class="filter-container">
       <app-filter class="filter-component"></app-filter>
       @if (isLoggedIn) {
-        <button class="btn btn-primary" (click)="createHouse()">Create new house</button>
+        <button class="btn btn-house-primary" (click)="createHouse()">Create new house</button>
       }
     </div>
   </div>
@@ -57,13 +57,13 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let house of houses">
-                  <td>{{ house.houseNumber }}</td>
-                  <td>{{ house.blockNumber }}</td>
-                  <td>{{ house.landNumber }}</td>
-                  <td>{{ house.price | number }}</td>
-                  <td>
+                  <td class="align-left">{{ house.houseNumber }}</td>
+                  <td class="align-left">{{ house.blockNumber }}</td>
+                  <td class="align-left">{{ house.landNumber }}</td>
+                  <td class="align-left">{{ house.price | number }}</td>
+                  <td class="align-left">
                     @if (isLoggedIn) {
-                      <button class="btn btn-primary" (click)="editHouse(house)">Edit</button>
+                      <button class="btn-house-primary" (click)="editHouse(house)">Edit</button>
                     }
                   </td>
                 </tr>

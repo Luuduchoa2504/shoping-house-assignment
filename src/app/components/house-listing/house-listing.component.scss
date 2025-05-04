@@ -24,12 +24,16 @@
     .filter-component {
       flex-grow: 1;
     }
-
-    .btn-primary {
-      white-space: nowrap;
-      padding: 8px 20px;
-    }
   }
+}
+
+.btn-house-primary {
+  background-color: #fe501f;
+  color: white;
+  white-space: nowrap;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 3px;
 }
 
 .model-list {
@@ -120,10 +124,6 @@
         td {
           padding: 12px;
           color: $text-color;
-
-          &:last-child {
-            text-align: center;
-          }
         }
       }
     }
@@ -142,7 +142,7 @@
   .filter-container {
     flex-direction: column;
 
-    .btn-primary {
+    .btn-house-primary {
       width: 100%;
     }
   }
