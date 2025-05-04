@@ -1,32 +1,80 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { AuthJwtService } from '../../core/auth-jwt.service';
+import {AuthService} from '../../core/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  private userInfoSubject = new BehaviorSubject<{ username: string } | null>(null);
+export class LoginService {
+  private readonly resourceUrl = 'https://vn-fe-test-api.iwalabs.info';
+  private readonly authToken = 'Aa123456';
 
-  constructor() {
-    // Khởi tạo từ localStorage khi ứng dụng bắt đầu
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      this.userInfoSubject.next(JSON.parse(userInfo));
-    }
+  constructor(
+    private http: HttpClient,
+    private authServerProvider: AuthJwtService,
+    private authService: AuthService // Inject AuthService
+  ) {}
+
+  login(username: string, password: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'authentication': this.authToken,
+      'Content-Type': 'application/vnd.api+json'
+    });
+
+    const body = {
+      data: {
+        type: 'auth',
+        attributes: {
+          username,
+          password
+        }
+      }
+    };
+
+    return this.http.post(`${this.resourceUrl}/auth`, body, { headers }).pipe(
+      tap((response: any) => {
+        const token = response?.data?.attributes?.token;
+        if (token) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('token', token);
+          this.authService.setUserInfo(username); // Cập nhật AuthService
+        }
+      })
+    );
   }
 
-  setUserInfo(username: string) {
-    const userInfo = { username };
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    this.userInfoSubject.next(userInfo);
+  register(username: string, password: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'authentication': this.authToken,
+      'Content-Type': 'application/vnd.api+json'
+    });
+
+    const body = {
+      data: {
+        type: 'users',
+        attributes: {
+          username,
+          password
+        }
+      }
+    };
+
+    return this.http.post(`${this.resourceUrl}/register`, body, { headers }).pipe(
+      tap(response => {
+      })
+    );
   }
 
-  clearUserInfo() {
-    localStorage.removeItem('userInfo');
-    this.userInfoSubject.next(null); // Phát ra null khi logout
+  logout() {
+    this.authServerProvider.logout().subscribe();
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
+    this.authService.clearUserInfo();
   }
 
-  getUserInfo() {
-    return this.userInfoSubject.asObservable();
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }
