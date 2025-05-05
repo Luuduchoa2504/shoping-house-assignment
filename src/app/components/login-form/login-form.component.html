@@ -19,7 +19,10 @@
       {{ isSignUp ? 'Already have an account?' : "Don't have an account?" }}
       <a href="#" (click)="toggleMode(); $event.preventDefault()">{{ isSignUp ? 'Login' : 'Sign Up' }}</a>
     </p>
-    <button type="submit" class="btn btn-primary">{{ isSignUp ? 'Sign Up' : 'Login' }}</button>
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary">{{ isSignUp ? 'Sign Up' : 'Login' }}</button>
+      <button type="button" class="btn btn-secondary" routerLink="/">View as Anonymous</button>
+    </div>
   </form>
   @if (error) {
     <ngb-alert class="mt-2" type="danger" (close)="error = null">{{ error }}</ngb-alert>

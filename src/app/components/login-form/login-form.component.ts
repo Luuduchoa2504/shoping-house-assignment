@@ -1,17 +1,18 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import {Router, ActivatedRoute, RouterLink} from '@angular/router';
 import { FormBuilder, FormGroup, ValidatorFn, Validators, AbstractControl } from '@angular/forms';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginService } from '../../services/login/login.service';
 import { StorageService } from '../../services/storage/storage.service';
 import { ToastrService } from 'ngx-toastr';
+import {CommonModule} from '@angular/common';
 
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbAlertModule],
+  imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, RouterLink],
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, effect, Signal, model, Input } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect, Signal, input, model } from '@angular/core';
 import { House, HouseModel } from '../../models/house.model';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth.service';
@@ -16,13 +16,13 @@ export class HouseListingComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  @Input({ required: true }) houseModels!: Signal<HouseModel[]>;
-  @Input({ required: true }) selectedModel!: Signal<HouseModel | null>;
-  @Input({ required: true }) houses!: Signal<House[]>;
-  @Input({ required: true }) isLoading!: Signal<boolean>;
-  @Input({ required: true }) errorModel!: Signal<unknown>;
-  @Input({ required: true }) errorHouse!: Signal<unknown>;
-  @Input({ required: true }) modelSelectedCallback!: (model: HouseModel) => void;
+  houseModels = input<HouseModel[]>();
+  selectedModel = input<HouseModel | null>();
+  houses = input<House[]>();
+  isLoading = input<boolean>();
+  errorModel = input<unknown>();
+  errorHouse = input<unknown>();
+  modelSelectedCallback = input<(model: HouseModel) => void>();
 
   filterHouseNumber = model<string>('');
   filterBlock = model<string>('');
@@ -35,31 +35,25 @@ export class HouseListingComponent implements OnInit {
 
   currentPage = signal<number>(1);
   modelsPerPage = signal<number>(6);
-  totalPages = computed(() => Math.ceil(this.houseModels().length / this.modelsPerPage()));
+  totalPages = computed(() =>
+    Math.ceil((this.houseModels() ?? []).length / this.modelsPerPage())
+  );
 
   paginatedHouseModels = computed(() => {
+    const models = this.houseModels() ?? [];
     const startIndex = (this.currentPage() - 1) * this.modelsPerPage();
     const endIndex = startIndex + this.modelsPerPage();
-    return this.houseModels().slice(startIndex, endIndex);
+    return models.slice(startIndex, endIndex);
   });
 
   filteredHouses = computed(() => {
-    const allHouses = this.houses();
+    const allHouses = this.houses() ?? [];
     const selectedModelValue = this.selectedModel();
     const filterHouseNumberValue = this.filterHouseNumber();
     const filterBlockValue = this.filterBlock();
     const filterLandValue = this.filterLand();
     const minPriceValue = this.minPrice();
     const maxPriceValue = this.maxPrice();
-
-    console.log('Filter values:', {
-      filterHouseNumber: filterHouseNumberValue,
-      filterBlock: filterBlockValue,
-      filterLand: filterLandValue,
-      minPrice: minPriceValue,
-      maxPrice: maxPriceValue,
-      selectedModel: selectedModelValue,
-    });
 
     if (!selectedModelValue?.model) {
       return [];
@@ -98,8 +92,9 @@ export class HouseListingComponent implements OnInit {
       this.showDetails.update(show => !show);
     } else {
       this.showDetails.set(true);
-      if (this.modelSelectedCallback) {
-        this.modelSelectedCallback(model);
+      const callback = this.modelSelectedCallback();
+      if (callback) {
+        callback(model);
       } else {
         console.error('modelSelectedCallback is undefined');
       }
@@ -117,11 +112,11 @@ export class HouseListingComponent implements OnInit {
   }
 
   onResetFilters() {
-    this.filterHouseNumber.update(() => '');
-    this.filterBlock.update(() => '');
-    this.filterLand.update(() => '');
-    this.minPrice.update(() => null);
-    this.maxPrice.update(() => null);
+    this.filterHouseNumber.set('');
+    this.filterBlock.set('');
+    this.filterLand.set('');
+    this.minPrice.set(null);
+    this.maxPrice.set(null);
   }
 
   goToPreviousPage() {

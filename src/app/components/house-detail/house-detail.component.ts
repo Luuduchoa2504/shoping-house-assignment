@@ -41,10 +41,10 @@ export class HouseDetailComponent implements OnInit {
       houseNumber: ['', [Validators.required, this.houseNumberValidator.bind(this)]],
       blockNumber: ['', Validators.required],
       landNumber: ['', Validators.required],
-      houseType: ['', Validators.required], // Bỏ giá trị mặc định để tránh xung đột
+      houseType: ['', Validators.required],
       model: ['', Validators.required],
-      price: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1)]], // Chỉ cho phép số dương
-      status: ['', Validators.required], // Bỏ giá trị mặc định
+      price: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1)]],
+      status: ['', Validators.required],
     });
   }
 
@@ -52,15 +52,14 @@ export class HouseDetailComponent implements OnInit {
     this.houseService.getHouseDetail(this.id).subscribe({
       next: (house) => {
         this.house = house;
-        console.log('House from API:', house); // Debug để kiểm tra dữ liệu
         this.houseForm.patchValue({
           houseNumber: house.houseNumber || '',
           blockNumber: house.blockNumber || '',
           landNumber: house.landNumber || '',
-          houseType: this.capitalizeFirstLetter(house.houseType) || 'Apartment', // Chuyển đổi houseType
+          houseType: this.capitalizeFirstLetter(house.houseType) || 'Apartment',
           model: house.model || '',
           price: house.price || '',
-          status: this.capitalizeFirstLetter(house.status) || 'Available', // Chuyển đổi status
+          status: this.capitalizeFirstLetter(house.status) || 'Available',
         });
       },
       error: (err) => {
@@ -99,10 +98,10 @@ export class HouseDetailComponent implements OnInit {
       houseNumber: formValue.houseNumber?.trim() || '',
       blockNumber: formValue.blockNumber?.trim() || '',
       landNumber: formValue.landNumber?.trim() || '',
-      houseType: formValue.houseType?.toLowerCase() || '', // Chuyển về dạng API yêu cầu
+      houseType: formValue.houseType?.toLowerCase() || '',
       model: formValue.model || '',
       price: Number(formValue.price) || 0,
-      status: formValue.status?.toLowerCase() || '', // Chuyển về dạng API yêu cầu
+      status: formValue.status?.toLowerCase() || '',
     };
 
     if (this.id) {

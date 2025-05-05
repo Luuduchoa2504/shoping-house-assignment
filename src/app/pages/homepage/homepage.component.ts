@@ -21,12 +21,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class HomepageComponent {
   private homepageState = inject(HomepageState);
 
-  houseModels = toSignal(this.homepageState.houseModelListSuccess, { initialValue: [] });
-  selectedModel = toSignal(this.homepageState.selectedModel, { initialValue: null });
-  houses = toSignal(this.homepageState.selectedModelHouses, { initialValue: [] });
-  isLoading = toSignal(this.homepageState.isLoading, { initialValue: false });
-  errorHouseModel = toSignal(this.homepageState.errorHouseModelList, { initialValue: null });
-  errorHouseList = toSignal(this.homepageState.errorHouseList, { initialValue: null });
+  readonly houseModels = toSignal(this.homepageState.houseModelListSuccess);
+  readonly selectedModel = toSignal(this.homepageState.selectedModel);
+  readonly houses = toSignal(this.homepageState.houseListSuccess);
+  readonly isLoading = toSignal(this.homepageState.isLoading);
+  readonly errorHouseModel = toSignal(this.homepageState.errorHouseModelList);
+  readonly errorHouseList = toSignal(this.homepageState.errorHouseList);
 
   constructor() {
     this.onModelSelected = this.onModelSelected.bind(this);

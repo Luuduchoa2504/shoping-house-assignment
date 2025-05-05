@@ -8,25 +8,34 @@
       <label>
         House Number
         <input type="text" formControlName="houseNumber" />
-        <div class="error" *ngIf="f['houseNumber'].touched && f['houseNumber'].errors">
-          <span *ngIf="f['houseNumber'].errors['required']">House number is required</span>
-          <span *ngIf="f['houseNumber'].errors['duplicate']">Your house number is already used</span>
-        </div>
+        @if (f['houseNumber'].touched && f['houseNumber'].errors) {
+          <div class="error">
+            @if (f['houseNumber'].errors['required']) {
+              <span>House number is required</span>
+            }
+            @if (f['houseNumber'].errors['duplicate']) {
+              <span>Your house number is already used</span>
+            }
+          </div>
+        }
       </label>
+
       <label>
         Block number
         <input type="text" formControlName="blockNumber" />
-        <div class="error" *ngIf="f['blockNumber'].touched && f['blockNumber'].errors?.['required']">
-          Block number is required
-        </div>
+        @if (f['blockNumber'].touched && f['blockNumber'].errors?.['required']) {
+          <div class="error">Block number is required</div>
+        }
       </label>
+
       <label>
         Land number
         <input type="text" formControlName="landNumber" />
-        <div class="error" *ngIf="f['landNumber'].touched && f['landNumber'].errors?.['required']">
-          Land number is required
-        </div>
+        @if (f['landNumber'].touched && f['landNumber'].errors?.['required']) {
+          <div class="error">Land number is required</div>
+        }
       </label>
+
       <label>
         House type
         <select formControlName="houseType">
@@ -37,6 +46,7 @@
         </select>
       </label>
     </div>
+
     <div class="form-row">
       <label>
         House model
@@ -46,15 +56,25 @@
           <option>apartment-2</option>
         </select>
       </label>
+
       <label>
         Price
         <input type="number" formControlName="price" />
-        <div class="error" *ngIf="f['price'].touched && f['price'].errors">
-          <span *ngIf="f['price'].errors['required']">Price is required</span>
-          <span *ngIf="f['price'].errors['pattern']">Only numbers allowed</span>
-          <span *ngIf="f['price'].errors['min']">Price must be greater than 0</span>
-        </div>
+        @if (f['price'].touched && f['price'].errors) {
+          <div class="error">
+            @if (f['price'].errors['required']) {
+              <span>Price is required</span>
+            }
+            @if (f['price'].errors['pattern']) {
+              <span>Only numbers allowed</span>
+            }
+            @if (f['price'].errors['min']) {
+              <span>Price must be greater than 0</span>
+            }
+          </div>
+        }
       </label>
+
       <label>
         Status
         <select formControlName="status">
@@ -64,6 +84,7 @@
         </select>
       </label>
     </div>
+
     <div class="form-actions mt-4">
       <button type="button" class="btn btn-submit" [disabled]="houseForm.invalid" (click)="onCreateUpdate()">
         {{ id ? 'Edit' : 'Create' }}

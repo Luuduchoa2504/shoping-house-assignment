@@ -19,7 +19,6 @@ export class HeaderComponent {
     return userInfo && userInfo.username ? userInfo.username : 'Account';
   });
 
-
   constructor() {
     effect(() => {
       const loggedIn = this.authService.isLoggedIn();
@@ -29,8 +28,8 @@ export class HeaderComponent {
 
   logout() {
     this.authService.clearUserInfo();
+    this.router.navigate(['/login']);
   }
-
 
   navigateToLogin() {
     this.router.navigate(['/login']);

@@ -1,5 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
-import {startWith, Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { startWith, Subject } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 export type AppStateData = {
@@ -30,6 +30,10 @@ export class StorageService {
     initialValue: this.getInitialState(),
   });
 
+  constructor() {
+    this.loadFromLocalStorage();
+  }
+
   saveData<T extends keyof AppStateData>(key: T, data: AppStateData[T]): void {
     this.saveAndReturnState(key, data);
   }
@@ -43,9 +47,24 @@ export class StorageService {
     const newState = {
       ...currentState,
       [key]: data,
+      version: this.currentVersion,
     };
+    localStorage.setItem(this.APP_STATE_KEY, JSON.stringify(newState));
     this.updateData$.next(newState);
     return newState;
+  }
+
+  private loadFromLocalStorage(): void {
+    const storedState = localStorage.getItem(this.APP_STATE_KEY);
+    if (storedState) {
+      const parsedState = JSON.parse(storedState);
+      if (parsedState.version === this.currentVersion) {
+        this.updateData$.next(parsedState);
+      } else {
+        this.updateData$.next(this.getInitialState());
+        localStorage.removeItem(this.APP_STATE_KEY);
+      }
+    }
   }
 
   private getInitialState(): AppStateData {
