@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { AuthJwtService } from '../../core/auth-jwt.service';
 import {AuthService} from '../../core/auth.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +15,7 @@ export class LoginService {
   constructor(
     private http: HttpClient,
     private authServerProvider: AuthJwtService,
-    private authService: AuthService // Inject AuthService
+    private authService: AuthService
   ) {}
 
   login(username: string, password: string): Observable<any> {
@@ -22,7 +23,6 @@ export class LoginService {
       'authentication': this.authToken,
       'Content-Type': 'application/vnd.api+json'
     });
-
     const body = {
       data: {
         type: 'auth',
@@ -32,37 +32,14 @@ export class LoginService {
         }
       }
     };
-
     return this.http.post(`${this.resourceUrl}/auth`, body, { headers }).pipe(
       tap((response: any) => {
         const token = response?.data?.attributes?.token;
         if (token) {
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('token', token);
-          this.authService.setUserInfo(username); // Cập nhật AuthService
+          this.authService.setUserInfo(username);
         }
-      })
-    );
-  }
-
-  register(username: string, password: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'authentication': this.authToken,
-      'Content-Type': 'application/vnd.api+json'
-    });
-
-    const body = {
-      data: {
-        type: 'users',
-        attributes: {
-          username,
-          password
-        }
-      }
-    };
-
-    return this.http.post(`${this.resourceUrl}/register`, body, { headers }).pipe(
-      tap(response => {
       })
     );
   }

@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, effect, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
-import { LoginService } from '../../services/login/login.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -11,39 +9,28 @@ import { Subscription } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-  accountLabel: string = 'Account';
-  isLoggedIn: boolean = false;
-  private userInfoSubscription: Subscription | undefined;
+export class HeaderComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(
-    private authService: AuthService,
-    private loginService: LoginService,
-    private router: Router
-  ) {}
+  isLoggedIn = signal(this.authService.isLoggedIn());
+  accountLabel = computed(() => {
+    const userInfo = this.authService.userInfo();
+    return userInfo && userInfo.username ? userInfo.username : 'Account';
+  });
 
-  ngOnInit(): void {
-    this.userInfoSubscription = this.authService.getUserInfo().subscribe((userInfo) => {
-      if (userInfo && userInfo.username) {
-        this.isLoggedIn = true;
-        this.accountLabel = userInfo.username;
-      } else {
-        this.isLoggedIn = false;
-        this.accountLabel = 'Account';
-      }
+
+  constructor() {
+    effect(() => {
+      const loggedIn = this.authService.isLoggedIn();
+      this.isLoggedIn.set(loggedIn);
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.userInfoSubscription) {
-      this.userInfoSubscription.unsubscribe();
-    }
+  logout() {
+    this.authService.clearUserInfo();
   }
 
-  logout() {
-    this.loginService.logout();
-    this.router.navigate(['/']);
-  }
 
   navigateToLogin() {
     this.router.navigate(['/login']);

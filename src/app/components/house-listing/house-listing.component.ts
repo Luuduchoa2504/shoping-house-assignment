@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, Output, ElementRef, ViewChildren, QueryList, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect, Signal, model, Input } from '@angular/core';
 import { House, HouseModel } from '../../models/house.model';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { FilterComponent } from '../filter/filter.component';
 
 @Component({
@@ -11,64 +10,129 @@ import { FilterComponent } from '../filter/filter.component';
   standalone: true,
   imports: [CommonModule, FilterComponent],
   templateUrl: './house-listing.component.html',
-  styleUrls: ['./house-listing.component.scss']
+  styleUrls: ['./house-listing.component.scss'],
 })
-export class HouseListingComponent implements OnInit, OnDestroy {
-  @Input() houseModels: HouseModel[] = [];
-  @Input() selectedModel: HouseModel | null = null;
-  @Input() houses: House[] = [];
-  @Input() isLoading: boolean = false;
-  @Input() errorModel: unknown = null;
-  @Input() errorHouse: unknown = null;
-  @Output() modelSelected = new EventEmitter<HouseModel>();
-  @ViewChildren('modelItem') modelItems!: QueryList<ElementRef>;
+export class HouseListingComponent implements OnInit {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  showDetails: boolean = false;
-  isLoggedIn: boolean = false;
-  private authSubscription: Subscription | undefined;
+  @Input({ required: true }) houseModels!: Signal<HouseModel[]>;
+  @Input({ required: true }) selectedModel!: Signal<HouseModel | null>;
+  @Input({ required: true }) houses!: Signal<House[]>;
+  @Input({ required: true }) isLoading!: Signal<boolean>;
+  @Input({ required: true }) errorModel!: Signal<unknown>;
+  @Input({ required: true }) errorHouse!: Signal<unknown>;
+  @Input({ required: true }) modelSelectedCallback!: (model: HouseModel) => void;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  filterHouseNumber = model<string>('');
+  filterBlock = model<string>('');
+  filterLand = model<string>('');
+  minPrice = model<number | null>(null);
+  maxPrice = model<number | null>(null);
 
-  ngOnInit(): void {
-    this.authSubscription = this.authService.getUserInfo().subscribe((userInfo) => {
-      this.isLoggedIn = !!userInfo && !!userInfo.username;
+  showDetails = signal(false);
+  isLoggedIn = this.authService.isLoggedIn;
+
+  currentPage = signal<number>(1);
+  modelsPerPage = signal<number>(6);
+  totalPages = computed(() => Math.ceil(this.houseModels().length / this.modelsPerPage()));
+
+  paginatedHouseModels = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.modelsPerPage();
+    const endIndex = startIndex + this.modelsPerPage();
+    return this.houseModels().slice(startIndex, endIndex);
+  });
+
+  filteredHouses = computed(() => {
+    const allHouses = this.houses();
+    const selectedModelValue = this.selectedModel();
+    const filterHouseNumberValue = this.filterHouseNumber();
+    const filterBlockValue = this.filterBlock();
+    const filterLandValue = this.filterLand();
+    const minPriceValue = this.minPrice();
+    const maxPriceValue = this.maxPrice();
+
+    console.log('Filter values:', {
+      filterHouseNumber: filterHouseNumberValue,
+      filterBlock: filterBlockValue,
+      filterLand: filterLandValue,
+      minPrice: minPriceValue,
+      maxPrice: maxPriceValue,
+      selectedModel: selectedModelValue,
     });
 
-    if (this.selectedModel) {
-      this.showDetails = true;
+    if (!selectedModelValue?.model) {
+      return [];
     }
+
+    return allHouses.filter(house => {
+      const matchesSelectedModel = house.model === selectedModelValue.model;
+      if (!matchesSelectedModel) return false;
+      const houseNumberStr = house.houseNumber?.toString() ?? '';
+      const matchesHouseNumber = !filterHouseNumberValue || houseNumberStr.includes(filterHouseNumberValue);
+      const blockNumberStr = house.blockNumber?.toString() ?? '';
+      const matchesBlock = !filterBlockValue || blockNumberStr.includes(filterBlockValue);
+      const landNumberStr = house.landNumber?.toString() ?? '';
+      const matchesLand = !filterLandValue || landNumberStr.includes(filterLandValue);
+      const priceValue = house.price ?? 0;
+      const matchesMinPrice = minPriceValue == null || priceValue >= minPriceValue;
+      const matchesMaxPrice = maxPriceValue == null || priceValue <= maxPriceValue;
+      return matchesHouseNumber && matchesBlock && matchesLand && matchesMinPrice && matchesMaxPrice;
+    });
+  });
+
+  constructor() {
+    effect(() => {
+      const selected = this.selectedModel();
+      if (selected) {
+        this.showDetails.set(true);
+      }
+    });
   }
 
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-  }
+  ngOnInit(): void {}
 
   selectModel(model: HouseModel) {
-    if (this.selectedModel?.id === model.id) {
-      this.showDetails = !this.showDetails;
+    const currentSelected = this.selectedModel();
+    if (currentSelected?.id === model.id) {
+      this.showDetails.update(show => !show);
     } else {
-      this.selectedModel = model;
-      this.showDetails = true;
+      this.showDetails.set(true);
+      if (this.modelSelectedCallback) {
+        this.modelSelectedCallback(model);
+      } else {
+        console.error('modelSelectedCallback is undefined');
+      }
     }
-    this.modelSelected.emit(model);
   }
 
   editHouse(house: House) {
-    if (this.isLoggedIn) {
-      this.router.navigate(['/detail', house.id], {
-        state: { house }
-      });
-    }
+    this.router.navigate(['/detail', house.id], {
+      state: { house },
+    });
   }
 
   createHouse() {
-    if (this.isLoggedIn) {
-      this.router.navigate(['/create']);
+    this.router.navigate(['/create']);
+  }
+
+  onResetFilters() {
+    this.filterHouseNumber.update(() => '');
+    this.filterBlock.update(() => '');
+    this.filterLand.update(() => '');
+    this.minPrice.update(() => null);
+    this.maxPrice.update(() => null);
+  }
+
+  goToPreviousPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update(page => page - 1);
+    }
+  }
+
+  goToNextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update(page => page + 1);
     }
   }
 }

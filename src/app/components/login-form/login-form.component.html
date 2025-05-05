@@ -22,6 +22,6 @@
     <button type="submit" class="btn btn-primary">{{ isSignUp ? 'Sign Up' : 'Login' }}</button>
   </form>
   @if (error) {
-    <ngb-alert type="danger" (close)="error = null">{{ error }}</ngb-alert>
+    <ngb-alert class="mt-2" type="danger" (close)="error = null">{{ error }}</ngb-alert>
   }
 </div>

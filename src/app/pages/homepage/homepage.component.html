@@ -1,12 +1,12 @@
 <app-header></app-header>
-<div *ngIf="houseModelListSuccess$ | async as houseModels" class="house-listing-container">
+<div class="house-listing-container">
   <app-house-listing
-    [houseModels]="houseModels!"
-    [selectedModel]="(selectedModel$ | async)!"
-    [houses]="(selectedModelHouses$ | async)!"
-    [isLoading]="(isLoading$ | async)!"
-    [errorModel]="(errorHouseModelList$ | async)!"
-    [errorHouse]="(errorHouseList$ | async)!"
-    (modelSelected)="onModelSelected($event)">
+    [houseModels]="houseModels"
+    [selectedModel]="selectedModel"
+    [houses]="houses"
+    [isLoading]="isLoading"
+    [errorModel]="errorHouseModel"
+    [errorHouse]="errorHouseList"
+    [modelSelectedCallback]="onModelSelected">
   </app-house-listing>
 </div>

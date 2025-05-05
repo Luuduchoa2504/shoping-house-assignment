@@ -1,74 +1,77 @@
 <div class="container">
   <div class="header-container">
     <div class="filter-container">
-      <app-filter class="filter-component"></app-filter>
-      @if (isLoggedIn) {
+      <app-filter class="filter-component"
+                  [(filterHouseNumber)]="filterHouseNumber"
+                  [(filterBlock)]="filterBlock"
+                  [(filterLand)]="filterLand"
+                  [(minPrice)]="minPrice"
+                  [(maxPrice)]="maxPrice"
+                  (resetFilters)="onResetFilters()">
+      </app-filter>
+      @if (isLoggedIn()) {
         <button class="btn btn-house-primary" (click)="createHouse()">Create new house</button>
       }
     </div>
   </div>
 
-  <!-- Main Content -->
   <div class="main-content">
-    <div *ngIf="isLoading" class="loading">Loading...</div>
-    <div *ngIf="errorModel || errorHouse" class="error">
-      Error: {{ (errorModel || errorHouse) | json }}
+    <div *ngIf="isLoading()" class="loading">Loading...</div>
+    <div *ngIf="errorModel() || errorHouse()" class="error">
+      Error: {{ (errorModel() || errorHouse()) | json }}
     </div>
 
-    <!-- Model List -->
     <div class="model-list">
-      <div *ngFor="let model of houseModels"
+      <div *ngFor="let model of paginatedHouseModels()"
            class="model-item"
-           [class.active]="selectedModel?.id === model.id"
+           [class.active]="(selectedModel()?.id ?? '') === model.id"
            (click)="selectModel(model)">
 
-        <!-- Model Header -->
         <div class="model-header">
           <span>{{ model.model }} house type</span>
         </div>
 
-        <!-- Expanded Content -->
-        @if (selectedModel?.id === model.id && showDetails) {
+        @if ((selectedModel()?.id ?? '') === model.id && showDetails()) {
           <div class="expanded-content">
-            <!-- Media Section -->
             <div class="media-container">
               <div class="text-content">
-                <h2>{{ selectedModel?.media?.title || 'No Title' }}</h2>
-                <p>{{ selectedModel?.media?.description || 'No Description' }}</p>
+                <h2>{{ selectedModel()?.media?.title || 'No Title' }}</h2>
+                <p>{{ selectedModel()?.media?.description || 'No Description' }}</p>
               </div>
               <div class="image-content">
-                <img [src]="selectedModel?.media?.banner"
+                <img [src]="selectedModel()?.media?.banner"
                      alt="Model Banner"
-                     *ngIf="selectedModel?.media?.banner" />
+                     *ngIf="selectedModel()?.media?.banner" />
               </div>
             </div>
 
-            <!-- House Table -->
             <div class="house-table">
-              <table *ngIf="houses?.length; else noHouses">
-                <thead>
-                <tr>
-                  <th>House Number</th>
-                  <th>Block No</th>
-                  <th>Land No</th>
-                  <th>Price</th>
-                  <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let house of houses">
-                  <td class="align-left">{{ house.houseNumber }}</td>
-                  <td class="align-left">{{ house.blockNumber }}</td>
-                  <td class="align-left">{{ house.landNumber }}</td>
-                  <td class="align-left">{{ house.price | number }}</td>
-                  <td class="align-left">
-                    @if (isLoggedIn) {
-                      <button class="btn-house-primary" (click)="editHouse(house)">Edit</button>
-                    }
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+              <div class="table-container">
+                <table *ngIf="filteredHouses().length; else noHouses">
+                  <thead>
+                  <tr>
+                    <th>House Number</th>
+                    <th>Block No</th>
+                    <th>Land No</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody class="table-body-scroll">
+                  <tr *ngFor="let house of filteredHouses()">
+                    <td class="align-left">{{ house.houseNumber }}</td>
+                    <td class="align-left">{{ house.blockNumber }}</td>
+                    <td class="align-left">{{ house.landNumber }}</td>
+                    <td class="align-left">{{ house.price | number }}</td>
+                    <td class="align-left">
+                      @if (isLoggedIn()) {
+                        <button class="btn-house-primary" (click)="editHouse(house)">Edit</button>
+                      }
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
               <ng-template #noHouses>
                 <p class="no-houses">No houses available for this model.</p>
               </ng-template>
@@ -76,6 +79,16 @@
           </div>
         }
       </div>
+    </div>
+
+    <div class="pagination-controls" *ngIf="houseModels().length > modelsPerPage()">
+      <button class="btn btn-house-primary" (click)="goToPreviousPage()" [disabled]="currentPage() === 1">
+        Previous
+      </button>
+      <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+      <button class="btn btn-house-primary" (click)="goToNextPage()" [disabled]="currentPage() === totalPages()">
+        Next
+      </button>
     </div>
   </div>
 </div>

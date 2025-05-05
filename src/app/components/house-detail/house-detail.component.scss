@@ -1,19 +1,19 @@
+@import '../../../themes/scss/variables';
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #fff;
+  background-color: $white;
   border-radius: 8px;
 }
 
 .breadcrumb {
-  color: #666;
+  color: $gray-medium;
   font-size: 14px;
-
   a {
-    color: #3498db;
+    color: $primary-blue;
     text-decoration: none;
-
     &:hover {
       text-decoration: underline;
     }
@@ -22,7 +22,7 @@
 
 .title {
   font-size: 24px;
-  color: #2c3e50;
+  color: $dark-blue;
   margin-bottom: 20px;
 }
 
@@ -30,57 +30,48 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-
   .form-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-
     @media (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
     }
-
     @media (max-width: 480px) {
       grid-template-columns: 1fr;
     }
-
     label {
       display: flex;
       flex-direction: column;
       font-weight: 600;
-      color: #34495e;
-
+      color: $gray-blue;
       input,
       select {
         margin-top: 6px;
         padding: 8px 12px;
         font-size: 14px;
-        border: 1px solid #ddd;
+        border: 1px solid $border-gray;
         border-radius: 4px;
         transition: border-color 0.3s;
-
         &:focus {
           outline: none;
-          border-color: #3498db;
-          box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+          border-color: $primary-blue;
+          box-shadow: 0 0 0 2px $primary-blue-light;
         }
       }
-
       .error {
-        color: #e74c3c;
+        color: $error-red;
         font-size: 12px;
         margin-top: 4px;
         height: 16px;
       }
     }
   }
-
   .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
     margin-top: 24px;
-
     button {
       padding: 10px 20px;
       font-weight: 600;
@@ -89,26 +80,21 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-
     .btn-cancel {
-      background-color: #f1f1f1;
-      color: #7f8c8d;
-
+      background-color: $gray-light;
+      color: $gray-text;
       &:hover {
-        background-color: #e0e0e0;
+        background-color: $gray-light-hover;
       }
     }
-
     .btn-submit {
-      background-color: #fe501f;
-      color: white;
-
+      background-color: $primary-orange;
+      color: $white;
       &:hover {
-        background-color: #e0461b;
+        background-color: $primary-orange-hover;
       }
-
       &:disabled {
-        background-color: #fea07f;
+        background-color: $primary-orange-disabled;
         cursor: not-allowed;
       }
     }

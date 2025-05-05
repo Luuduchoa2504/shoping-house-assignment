@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ValidatorFn, Validators, AbstractControl } from '@angular/forms';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginService } from '../../services/login/login.service';
+import { StorageService } from '../../services/storage/storage.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-login-form',
@@ -13,17 +16,19 @@ import { LoginService } from '../../services/login/login.service';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
+  private storageService = inject(StorageService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private formBuilder = inject(FormBuilder);
+  private loginService = inject(LoginService);
+  private toastrService = inject(ToastrService);
+
   error: string | null = null;
   loginForm!: FormGroup;
-  isSignUp = false; // Toggle between login and sign-up modes
+  isSignUp = false;
   returnUrl: string = '/';
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private loginService: LoginService
-  ) {}
+  constructor() {}
 
   ngOnInit() {
     this.initForm();
@@ -34,7 +39,7 @@ export class LoginFormComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [''] // Only required for sign-up
+      confirmPassword: ['']
     });
     this.updateValidators();
   }
@@ -42,7 +47,6 @@ export class LoginFormComponent implements OnInit {
   updateValidators() {
     const passwordControl = this.loginForm.get('password');
     const confirmPasswordControl = this.loginForm.get('confirmPassword');
-
     if (this.isSignUp) {
       confirmPasswordControl?.setValidators([Validators.required, Validators.minLength(6)]);
       this.loginForm.setValidators([this.passwordMatchValidator]);
@@ -77,15 +81,15 @@ export class LoginFormComponent implements OnInit {
         this.error = 'Sign-up is not supported by the current API. Please contact the administrator.';
         return;
       }
-      // Login mode
       this.loginService.login(username, password).subscribe({
         next: (response) => {
-          const token = response?.data?.attributes?.token; // Adjust based on actual API response
+          const token = response?.data?.attributes?.token;
           if (token) {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('token', token);
-            localStorage.setItem('userInfo', JSON.stringify({ username }));
+            this.storageService.saveData('isLoggedIn', true);
+            this.storageService.saveData('token', token);
+            this.storageService.saveData('userInfo', { username });
             this.error = null;
+            this.toastrService.success('You are logged in as Administrator', 'Success');
             this.router.navigate([this.returnUrl]);
           } else {
             this.error = 'No token received from server.';

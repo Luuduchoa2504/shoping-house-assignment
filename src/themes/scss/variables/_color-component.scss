@@ -1,9 +1,21 @@
-// variables.scss
-$primary-color: #007bff;
-$border-color: #ccc;
-$background-color: #f9f9f9;
-$text-color: #333;
-$error-color: #721c24;
-$error-bg: #f8d7da;
-$loading-bg: #e9ecef;
-$orange-color: #fe501f; // Match mockup orange
+$primary-orange: #fe501f;
+$primary-orange-hover: #e0461b;
+$primary-orange-disabled: #fea07f;
+$primary-blue: #3498db;
+$primary-blue-light: rgba(52, 152, 219, 0.2);
+$error-red: #e74c3c;
+$gray-light: #f1f1f1;
+$gray-light-hover: #e0e0e0;
+$white: #fff;
+$gray-medium: #666;
+$gray-dark: #333;
+$dark-blue: #2c3e50;
+$gray-blue: #34495e;
+$gray-text: #7f8c8d;
+$gray-background: #f8f9fa;
+$black-shadow: rgba(0, 0, 0, 0.1);
+$border-gray: #ddd;
+
+$orange-color: $primary-orange;
+$border-color: $border-gray;
+$text-color: $gray-blue;

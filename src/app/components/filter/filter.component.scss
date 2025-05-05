@@ -1,3 +1,5 @@
+@import '../../../themes/scss/variables';
+
 .filter-container {
   display: flex;
   align-items: center;
@@ -6,24 +8,21 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   padding-bottom: 5px;
-
   .filter-component {
     flex: 1;
     min-width: 0;
   }
-
   .btn-primary {
     white-space: nowrap;
-    background-color: #fe501f;
-    color: white;
+    background-color: $primary-orange;
+    color: $white;
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-
     &:hover {
-      background-color: #e0461b;
+      background-color: $primary-orange-hover;
     }
   }
 }
@@ -34,53 +33,37 @@
 
 .filter-section {
   display: flex;
-  gap: 8px;
   align-items: center;
   flex-wrap: nowrap;
-
-  .form-control {
-    &.compact {
-      min-width: 80px;
-      width: auto;
-      padding: 6px 8px;
-      font-size: 14px;
-
-      &[type="number"] {
-        width: 100px;
-      }
-    }
-  }
-}
-
-.filter-section {
-  display: flex;
+  overflow-x: auto;
   gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-
+  .filter-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
   .form-control {
     &.compact {
-      min-width: 80px;
+      min-width: 100px;
       width: auto;
       padding: 6px 8px;
       font-size: 14px;
-
       &[type="number"] {
-        width: 100px;
+        width: 120px;
       }
     }
   }
-
   .btn-reset {
     padding: 6px 12px;
-    background-color: #f1f1f1;
-    border: 1px solid #ddd;
+    background-color: $gray-light;
+    border: 1px solid $border-gray;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
-
+    white-space: nowrap;
     &:hover {
-      background-color: #e0e0e0;
+      background-color: $gray-light-hover;
     }
   }
 }

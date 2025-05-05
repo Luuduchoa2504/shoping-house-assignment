@@ -8,19 +8,16 @@
 
 .header-container {
   margin-bottom: 30px;
-
   h1 {
     color: $orange-color;
     font-size: 2rem;
     text-align: center;
     margin-bottom: 20px;
   }
-
   .filter-container {
     display: flex;
     gap: 15px;
     align-items: center;
-
     .filter-component {
       flex-grow: 1;
     }
@@ -28,8 +25,8 @@
 }
 
 .btn-house-primary {
-  background-color: #fe501f;
-  color: white;
+  background-color: $primary-orange;
+  color: $white;
   white-space: nowrap;
   padding: 8px 20px;
   border: none;
@@ -47,16 +44,13 @@
   border-radius: 8px;
   transition: all 0.3s ease;
   cursor: pointer;
-
   .model-header {
     padding: 15px;
     font-weight: 500;
   }
-
   &.active {
     border-color: $orange-color;
     box-shadow: 0 2px 8px rgba($orange-color, 0.1);
-
     .model-header {
       background-color: lighten($orange-color, 40%);
       border-radius: 8px 8px 0 0;
@@ -67,63 +61,72 @@
 .expanded-content {
   padding: 15px;
   border-top: 1px solid $border-color;
-
   .media-container {
     display: flex;
     gap: 30px;
     margin-bottom: 20px;
-
     .text-content {
       flex: 1;
-
       h2 {
         color: $orange-color;
         margin-bottom: 10px;
         font-size: 1.5rem;
       }
-
       p {
         color: lighten($text-color, 20%);
         line-height: 1.6;
       }
     }
-
     .image-content {
       flex: 1;
       max-width: 400px;
-
       img {
         width: 100%;
         height: auto;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px $black-shadow;
       }
     }
   }
-
   .house-table {
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-
-      thead {
-        background-color: $orange-color;
-
-        th {
-          padding: 12px;
-          color: white;
-          text-align: left;
-          font-weight: 500;
+    .table-container {
+      max-height: 300px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: block;
+      position: relative;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: $white;
+        table-layout: fixed;
+        thead {
+          background-color: $orange-color;
+          position: sticky;
+          top: 0;
+          z-index: 1;
+          th {
+            padding: 12px;
+            color: $white;
+            text-align: left;
+            font-weight: 500;
+            width: 20%;
+            box-sizing: border-box;
+          }
         }
-      }
-
-      tbody tr {
-        border-bottom: 1px solid $border-color;
-
-        td {
-          padding: 12px;
-          color: $text-color;
+        tbody {
+          tr {
+            border-bottom: 1px solid $border-color;
+            td {
+              padding: 12px;
+              color: $text-color;
+              width: 20%;
+              box-sizing: border-box;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
         }
       }
     }
@@ -132,7 +135,7 @@
 
 .no-houses {
   padding: 15px;
-  background-color: #f8f9fa;
+  background-color: $gray-background;
   border-radius: 8px;
   color: lighten($text-color, 30%);
   text-align: center;
@@ -141,26 +144,45 @@
 @media (max-width: 768px) {
   .filter-container {
     flex-direction: column;
-
     .btn-house-primary {
       width: 100%;
     }
   }
-
   .media-container {
     flex-direction: column !important;
-
     .image-content {
       max-width: 100% !important;
       order: -1;
     }
   }
-
   .house-table {
-    overflow-x: auto;
-
-    table {
-      min-width: 600px;
+    .table-container {
+      max-height: 200px;
+      overflow-x: auto;
+      table {
+        min-width: 600px;
+      }
     }
+  }
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  span {
+    font-size: 14px;
+    color: $gray-dark;
   }
 }

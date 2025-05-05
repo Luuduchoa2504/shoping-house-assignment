@@ -2,7 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { HouseService } from '../../services/house/house.service';
 import { House, HouseModel } from '../../models/house.model';
-import { catchError, Observable, of, switchMap, tap } from 'rxjs';
+import {Observable, switchMap, tap} from 'rxjs';
+import {tapResponse} from '@ngrx/operators';
 
 export interface HouseState {
   isLoading: boolean;
@@ -10,6 +11,8 @@ export interface HouseState {
   errorHouseModelList: unknown;
   houseListSuccess: House[];
   errorHouseList: unknown;
+  houseDetailSuccess: House;
+  errorHouseDetail: unknown;
   selectedModel: HouseModel | null;
 }
 
@@ -19,6 +22,8 @@ const defaultState: HouseState = {
   errorHouseModelList: null,
   houseListSuccess: [],
   errorHouseList: null,
+  houseDetailSuccess: {} as House,
+  errorHouseDetail: null,
   selectedModel: null,
 };
 
@@ -28,86 +33,81 @@ export class HomepageState extends ComponentStore<HouseState> {
 
   constructor() {
     super(defaultState);
+    this.loadHouseModelList();
+    this.loadHouseList();
   }
 
-  // Selectors
-  readonly isLoading$ = this.select(({ isLoading }) => isLoading);
-  readonly houseModelListSuccess$ = this.select(({ houseModelListSuccess }) => houseModelListSuccess);
-  readonly houseListSuccess$ = this.select(({ houseListSuccess }) => houseListSuccess);
-  readonly selectedModel$ = this.select(({ selectedModel }) => selectedModel);
-  readonly errorHouseModelList$ = this.select(({ errorHouseModelList }) => errorHouseModelList);
-  readonly errorHouseList$ = this.select(({ errorHouseList }) => errorHouseList);
-
-  readonly selectModel = this.updater((state, model: HouseModel) => {
-    return {
-      ...state,
-      selectedModel: model
-    };
-  });
-
-  readonly selectedModelHouses$ = this.select(
-    this.selectedModel$,
-    this.houseListSuccess$,
-    (selectedModel, houses) => {
-      if (!selectedModel?.id) {
+  readonly isLoading = this.select((state) => state.isLoading);
+  readonly houseModelListSuccess = this.select((state) => state.houseModelListSuccess);
+  readonly houseListSuccess = this.select((state) => state.houseListSuccess);
+  readonly selectedModel = this.select((state) => state.selectedModel);
+  readonly errorHouseModelList = this.select((state) => state.errorHouseModelList);
+  readonly errorHouseList = this.select((state) => state.errorHouseList);
+  readonly selectedModelHouses = this.select(
+    this.houseListSuccess,
+    this.selectedModel,
+    (houses, selectedModel) => {
+      if (!selectedModel?.model) {
         return [];
       }
-      const filtered = houses.filter(house => {
-        const match = house.model?.id === selectedModel.id;
-        return match;
-      });
-      return filtered;
+      return houses.filter(house => house.model === selectedModel.model);
     }
   );
 
-  // Effects
-  readonly loadHouseModelList = this.effect((trigger$: Observable<void>) =>
-    trigger$.pipe(
+  readonly setSelectedModel = this.updater((state, model: HouseModel | null) => ({
+    ...state,
+    selectedModel: model,
+  }));
+
+  readonly loadHouseModelList = this.effect((trigger$: Observable<void>) => {
+    return trigger$.pipe(
       tap(() => this.patchState({ isLoading: true })),
       switchMap(() =>
         this.houseService.getHouseModelsList().pipe(
-          tap((houseModels: HouseModel[]) => {
-            this.patchState({
-              houseModelListSuccess: houseModels,
-              errorHouseModelList: null,
-              isLoading: false,
-            });
-          }),
-          catchError((error) => {
-            this.patchState({
-              houseModelListSuccess: [],
-              errorHouseModelList: error,
-              isLoading: false,
-            });
-            return of([]);
-          })
+          tapResponse(
+            (resp) => {
+              this.patchState({
+                houseModelListSuccess: resp.map(item => new HouseModel(item)),
+                errorHouseModelList: null,
+                isLoading: false,
+              });
+            },
+            (error) => {
+              this.patchState({
+                houseModelListSuccess: [],
+                errorHouseModelList: error,
+                isLoading: false,
+              });
+            }
+          )
         )
       )
-    )
-  );
+    );
+  });
 
-  readonly loadHouseList = this.effect((trigger$: Observable<void>) =>
-    trigger$.pipe(
+  readonly loadHouseList = this.effect((trigger$: Observable<void>) => {
+    return trigger$.pipe(
       tap(() => this.patchState({ isLoading: true })),
       switchMap(() =>
         this.houseService.getListHouses().pipe(
-          tap((houses: House[]) => {
-            this.patchState({
-              houseListSuccess: houses,
-              errorHouseList: null,
-              isLoading: false,
-            });
-          }),
-          catchError((error) => {
-            this.patchState({
-              houseListSuccess: [],
-              errorHouseList: error,
-              isLoading: false,
-            });
-            return of([]);
-          })
+          tapResponse(
+            (resp) => {
+              this.patchState({
+                houseListSuccess: resp.map(item => new House(item)),
+                errorHouseList: null,
+                isLoading: false,
+              });
+            },
+            (error) => {
+              this.patchState({
+                houseListSuccess: [],
+                errorHouseList: error,
+                isLoading: false,
+              });
+            }
+          )
         )
       )
-    )
-  );
+    );
+  });
 }

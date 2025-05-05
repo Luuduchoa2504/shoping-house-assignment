@@ -1,31 +1,22 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, inject, computed } from '@angular/core';
+import {StorageService} from '../services/storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private userInfoSubject = new BehaviorSubject<{ username: string } | null>(null);
-
-  constructor() {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      this.userInfoSubject.next(JSON.parse(userInfo));
-    }
-  }
+  private storageService = inject(StorageService);
+  readonly userInfo = computed(() => this.storageService.appState()?.userInfo);
+  readonly isLoggedIn = computed(() => this.storageService.appState()?.isLoggedIn ?? false);
 
   setUserInfo(username: string) {
     const userInfo = { username };
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    this.userInfoSubject.next(userInfo);
+    this.storageService.saveData('userInfo', userInfo);
   }
 
   clearUserInfo() {
-    localStorage.removeItem('userInfo');
-    this.userInfoSubject.next(null); // Phát ra null khi logout
-  }
-
-  getUserInfo() {
-    return this.userInfoSubject.asObservable();
+    this.storageService.clearData('userInfo');
+    this.storageService.saveData('isLoggedIn', false);
+    this.storageService.clearData('token');
   }
 }

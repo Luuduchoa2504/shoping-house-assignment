@@ -1,11 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
-
-/* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
-/* src/styles.css */
+@import 'ngx-toastr/toastr';
 :root {
-  --primary-color: #fe501f; /* Orange color from the mockup */
-  --text-color: #ffffff; /* White text for contrast */
+  --primary-color: #fe501f;
+  --text-color: #ffffff;
   --container-max-width: 1200px;
 }
 
