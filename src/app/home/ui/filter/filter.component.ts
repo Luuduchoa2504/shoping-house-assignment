@@ -87,24 +87,14 @@ export class FilterComponent implements OnInit {
     this.resetFilters.emit();
   }
 
-  allowOnlyDigits(event: KeyboardEvent) {
-    const allowedKeys = [
-      'Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'
-    ];
+  onInput(event: Event, controlName: string) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/[^0-9]/g, '');
 
-    const isDigit = /^\d$/.test(event.key);
-
-    if (!isDigit && !allowedKeys.includes(event.key)) {
-      event.preventDefault();
+    if (value !== numericValue) {
+      input.value = numericValue;
+      this.filterForm.get(controlName)!.setValue(numericValue === '' ? null : parseInt(numericValue), { emitEvent: false });
     }
   }
-
-  blockNonNumericPaste(event: ClipboardEvent) {
-    const paste = event.clipboardData?.getData('text') ?? '';
-    if (!/^\d+$/.test(paste)) {
-      event.preventDefault();
-    }
-  }
-
-
 }

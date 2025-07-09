@@ -27,18 +27,16 @@
         class="form-control compact"
         placeholder="Min price"
         formControlName="minPrice"
-        (keydown.enter)="applyFilters()"
-        (keydown)="allowOnlyDigits($event)"
-        (paste)="blockNonNumericPaste($event)" />
+        (input)="onInput($event, 'minPrice')"
+        (keydown.enter)="applyFilters()">
 
       <input
         type="text"
         class="form-control compact"
         placeholder="Max price"
         formControlName="maxPrice"
-        (keydown.enter)="applyFilters()"
-        (keydown)="allowOnlyDigits($event)"
-        (paste)="blockNonNumericPaste($event)" />
+        (input)="onInput($event, 'maxPrice')"
+        (keydown.enter)="applyFilters()">
 
       <button
         type="button"
