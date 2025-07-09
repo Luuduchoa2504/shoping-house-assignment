@@ -1,0 +1,49 @@
+<div class="container-global">
+  <div class="filter-section">
+    <form [formGroup]="filterForm" class="filter-form">
+      <input
+        type="text"
+        class="form-control compact"
+        placeholder="House No"
+        formControlName="houseNumber"
+        (keydown.enter)="applyFilters()">
+
+      <input
+        type="text"
+        class="form-control compact"
+        placeholder="Block"
+        formControlName="filterBlock"
+        (keydown.enter)="applyFilters()">
+
+      <input
+        type="text"
+        class="form-control compact"
+        placeholder="Land"
+        formControlName="filterLand"
+        (keydown.enter)="applyFilters()">
+
+      <input
+        type="text"
+        class="form-control compact"
+        placeholder="Min price"
+        formControlName="minPrice"
+        (keydown.enter)="applyFilters()"
+        (keydown)="allowOnlyDigits($event)"
+        (paste)="blockNonNumericPaste($event)" />
+
+      <input
+        type="text"
+        class="form-control compact"
+        placeholder="Max price"
+        formControlName="maxPrice"
+        (keydown.enter)="applyFilters()"
+        (keydown)="allowOnlyDigits($event)"
+        (paste)="blockNonNumericPaste($event)" />
+
+      <button
+        type="button"
+        class="btn-reset"
+        (click)="onReset()">Reset</button>
+    </form>
+  </div>
+</div>

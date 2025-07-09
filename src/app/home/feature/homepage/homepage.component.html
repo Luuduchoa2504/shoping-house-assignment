@@ -1,0 +1,12 @@
+<app-header></app-header>
+<div class="house-listing-container">
+  <app-home-listing
+    [houseModels]="houseModels()"
+    [selectedModel]="selectedModel()"
+    [houses]="houses()"
+    [isLoading]="isLoading()"
+    [errorModel]="errorHouseModel()"
+    [errorHouse]="errorHouseList()"
+    [modelSelectedCallback]="onModelSelected">
+  </app-home-listing>
+</div>
