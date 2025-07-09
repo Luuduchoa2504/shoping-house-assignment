@@ -1,4 +1,28 @@
-/* Optional: Keep component-specific overrides */
+@import '../../../../themes/scss/variables/index';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: $orange-color;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.header__title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .header__account {
   padding: 5px 10px;
   border-radius: 4px;
@@ -7,4 +31,52 @@
 
 .header__account:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.header__auth-links {
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    color: #ddd;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 10px;
+  }
+
+  .header__title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 10px;
+    text-align: center;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .header__title {
+    font-size: 18px;
+  }
+
+  .btn,
+  .header__auth-links a {
+    font-size: 12px;
+    padding: 6px;
+  }
 }

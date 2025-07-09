@@ -5,13 +5,15 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
   .filter-component {
     flex: 1;
     min-width: 0;
   }
+
   .btn-primary {
     white-space: nowrap;
     background-color: $primary-orange;
@@ -21,6 +23,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+
     &:hover {
       background-color: $primary-orange-hover;
     }
@@ -29,31 +32,41 @@
 
 .container-global {
   width: 100%;
+  overflow-x: hidden;
 }
 
 .filter-section {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
-  overflow-x: auto;
   gap: 8px;
+  width: 100%;
+  overflow-x: hidden;
+
   .filter-form {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: nowrap;
+    width: 100%;
+    flex-wrap: nowrap; /* Prevent wrapping on large screens */
+
+    @media (max-width: 1024px) {
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
   }
+
   .form-control {
     &.compact {
       min-width: 100px;
       width: auto;
       padding: 6px 8px;
       font-size: 14px;
+
       &[type="number"] {
         width: 120px;
       }
     }
   }
+
   .btn-reset {
     padding: 6px 12px;
     background-color: $gray-light;
@@ -62,8 +75,25 @@
     cursor: pointer;
     transition: all 0.3s;
     white-space: nowrap;
+
     &:hover {
       background-color: $gray-light-hover;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .filter-section .filter-form {
+    flex-direction: column;
+    align-items: stretch;
+
+    .form-control.compact {
+      width: 100%;
+    }
+
+    .btn-reset {
+      width: 100%;
+      margin-top: 10px;
     }
   }
 }

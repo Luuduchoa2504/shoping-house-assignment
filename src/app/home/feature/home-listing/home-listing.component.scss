@@ -4,22 +4,35 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%; // Ensure it fits viewport
+  box-sizing: border-box;
+  overflow-x: hidden; // Prevent horizontal scrolling
 }
 
 .header-container {
   margin-bottom: 30px;
+
   h1 {
     color: $orange-color;
     font-size: 2rem;
     text-align: center;
     margin-bottom: 20px;
   }
+
   .filter-container {
     display: flex;
     gap: 15px;
     align-items: center;
+    flex-wrap: wrap; // Allow wrapping on smaller screens
+    justify-content: space-between; // Distribute space
+
     .filter-component {
-      flex-grow: 1;
+      flex: 1 1 60%; // Grow but with a min basis
+      min-width: 0; // Prevent overflow
+    }
+
+    .btn-house-primary {
+      flex-shrink: 0; // Prevent button from shrinking
     }
   }
 }
@@ -31,6 +44,7 @@
   padding: 8px 20px;
   border: none;
   border-radius: 3px;
+  font-size: 14px;
 }
 
 .model-list {
@@ -44,13 +58,16 @@
   border-radius: 8px;
   transition: all 0.3s ease;
   cursor: pointer;
+
   .model-header {
     padding: 15px;
     font-weight: 500;
   }
+
   &.active {
     border-color: $orange-color;
     box-shadow: 0 2px 8px rgba($orange-color, 0.1);
+
     .model-header {
       background-color: lighten($orange-color, 40%);
       border-radius: 8px 8px 0 0;
@@ -61,10 +78,12 @@
 .expanded-content {
   padding: 15px;
   border-top: 1px solid $border-color;
+
   .media-container {
     display: flex;
     gap: 30px;
     margin-bottom: 20px;
+
     .text-content {
       flex: 1;
       h2 {
@@ -77,6 +96,7 @@
         line-height: 1.6;
       }
     }
+
     .image-content {
       flex: 1;
       max-width: 400px;
@@ -88,23 +108,27 @@
       }
     }
   }
+
   .house-table {
     .table-container {
       max-height: 300px;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow-y: auto; // Vertical scroll only
+      overflow-x: hidden; // Prevent horizontal scroll
       display: block;
-      position: relative;
+
       table {
         width: 100%;
+        min-width: 100%; // Ensure table fits container
         border-collapse: collapse;
         background-color: $white;
         table-layout: fixed;
+
         thead {
           background-color: $orange-color;
           position: sticky;
           top: 0;
           z-index: 1;
+
           th {
             padding: 12px;
             color: $white;
@@ -114,9 +138,11 @@
             box-sizing: border-box;
           }
         }
+
         tbody {
           tr {
             border-bottom: 1px solid $border-color;
+
             td {
               padding: 12px;
               color: $text-color;
@@ -141,27 +167,67 @@
   text-align: center;
 }
 
+@media (max-width: 1024px) {
+  .filter-container {
+    gap: 10px;
+
+    .filter-component {
+      flex: 1 1 55%;
+    }
+  }
+
+  .media-container {
+    flex-direction: column;
+    .image-content {
+      max-width: 100%;
+      order: -1;
+    }
+  }
+}
+
 @media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
   .filter-container {
     flex-direction: column;
+    gap: 10px;
+
+    .filter-component {
+      width: 100%;
+    }
+
     .btn-house-primary {
       width: 100%;
     }
   }
+
   .media-container {
-    flex-direction: column !important;
-    .image-content {
-      max-width: 100% !important;
-      order: -1;
+    gap: 15px;
+  }
+
+  .house-table .table-container {
+    max-height: 200px;
+    table {
+      min-width: 500px;
     }
   }
-  .house-table {
-    .table-container {
-      max-height: 200px;
-      overflow-x: auto;
-      table {
-        min-width: 600px;
-      }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+
+  .header-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .house-table .table-container {
+    max-height: 150px;
+    table {
+      min-width: 400px;
     }
   }
 }
@@ -172,6 +238,7 @@
   align-items: center;
   margin-top: 20px;
   gap: 10px;
+
   button {
     padding: 8px 16px;
     font-size: 14px;
@@ -181,6 +248,7 @@
       cursor: not-allowed;
     }
   }
+
   span {
     font-size: 14px;
     color: $gray-dark;

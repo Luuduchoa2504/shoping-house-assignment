@@ -6,20 +6,38 @@
   margin: 0 auto;
   min-height: 100vh;
   box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden;
   app-header {
     margin-bottom: 20px;
   }
+
   app-filter {
     margin-bottom: 30px;
   }
+
   .house-listing-container {
     width: 100%;
+    overflow-x: hidden;
   }
-  @media (max-width: 768px) {
-    padding: 10px;
+
+  @media (max-width: 1024px) {
+    padding: 15px;
     app-header,
     app-filter {
       margin-bottom: 15px;
     }
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    app-header,
+    app-filter {
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 5px;
   }
 }
