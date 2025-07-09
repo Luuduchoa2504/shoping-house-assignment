@@ -1,5 +1,15 @@
 @import '../../../../themes/scss/variables/index';
 
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; // Full viewport height
+  background-color: $gray-light; // Optional: Add a background for contrast
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .login-container {
   max-width: 400px;
   margin: 0 auto;
@@ -7,6 +17,7 @@
   background-color: $white;
   border-radius: 8px;
   box-shadow: 0 2px 8px $black-shadow;
+  width: 100%; // Ensure it scales on smaller screens
 
   h2 {
     text-align: center;
@@ -69,7 +80,7 @@
     }
 
     .btn-primary {
-      background-color: $primary-orange; // Màu cam cho Login/Sign Up
+      background-color: $primary-orange;
       color: $white;
 
       &:hover {
@@ -78,8 +89,8 @@
     }
 
     .btn-secondary {
-      background-color: $white; // Màu trắng cho View as Anonymous (trái ngược với cam)
-      color: $primary-orange; // Văn bản cam để tương phản
+      background-color: $white;
+      color: $primary-orange;
       border: 1px solid $primary-orange;
 
       &:hover {

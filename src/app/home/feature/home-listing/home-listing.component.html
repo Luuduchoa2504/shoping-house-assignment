@@ -46,6 +46,8 @@
                 <div class="image-content">
                   @if (selectedModel()?.media?.banner) {
                     <img [src]="selectedModel()?.media?.banner" alt="Model Banner" />
+                  } @else {
+                    <img [src]="'/assets/themes/images/download.jpeg'" alt="Model Banner" />
                   }
                 </div>
               </div>
