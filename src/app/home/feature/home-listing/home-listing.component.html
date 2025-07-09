@@ -60,7 +60,9 @@
                         <th>Block No</th>
                         <th>Land No</th>
                         <th>Price</th>
-                        <th>Action</th>
+                        @if (isLoggedIn()) {
+                          <th>Action</th>
+                        }
                       </tr>
                       </thead>
                       <tbody class="table-body-scroll">

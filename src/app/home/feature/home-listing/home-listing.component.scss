@@ -4,9 +4,9 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  width: 100%; // Ensure it fits viewport
+  width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden; // Prevent horizontal scrolling
+  overflow-x: hidden;
 }
 
 .header-container {
@@ -23,16 +23,16 @@
     display: flex;
     gap: 15px;
     align-items: center;
-    flex-wrap: wrap; // Allow wrapping on smaller screens
-    justify-content: space-between; // Distribute space
+    flex-wrap: wrap;
+    justify-content: space-between;
 
     .filter-component {
-      flex: 1 1 60%; // Grow but with a min basis
-      min-width: 0; // Prevent overflow
+      flex: 1 1 60%;
+      min-width: 0;
     }
 
     .btn-house-primary {
-      flex-shrink: 0; // Prevent button from shrinking
+      flex-shrink: 0;
     }
   }
 }
@@ -86,11 +86,13 @@
 
     .text-content {
       flex: 1;
+
       h2 {
         color: $orange-color;
         margin-bottom: 10px;
         font-size: 1.5rem;
       }
+
       p {
         color: lighten($text-color, 20%);
         line-height: 1.6;
@@ -100,6 +102,7 @@
     .image-content {
       flex: 1;
       max-width: 400px;
+
       img {
         width: 100%;
         height: auto;
@@ -112,13 +115,14 @@
   .house-table {
     .table-container {
       max-height: 300px;
-      overflow-y: auto; // Vertical scroll only
-      overflow-x: hidden; // Prevent horizontal scroll
+      overflow-y: auto;
+      overflow-x: hidden;
       display: block;
+      width: 100%;
 
       table {
         width: 100%;
-        min-width: 100%; // Ensure table fits container
+        min-width: 0;
         border-collapse: collapse;
         background-color: $white;
         table-layout: fixed;
@@ -129,28 +133,41 @@
           top: 0;
           z-index: 1;
 
+          tr {
+            display: flex;
+            width: 100%;
+          }
+
           th {
             padding: 12px;
             color: $white;
             text-align: left;
             font-weight: 500;
-            width: 20%;
+            flex: 1 1 25%;
             box-sizing: border-box;
+            &:nth-child(5) { // Action column
+              display: none;
+            }
           }
         }
 
         tbody {
           tr {
+            display: flex;
+            width: 100%;
             border-bottom: 1px solid $border-color;
 
             td {
               padding: 12px;
               color: $text-color;
-              width: 20%;
+              flex: 1 1 25%;
               box-sizing: border-box;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+              &:nth-child(5) {
+                display: none;
+              }
             }
           }
         }
@@ -167,6 +184,28 @@
   text-align: center;
 }
 
+@media (min-width: 0px) {
+  .house-table .table-container table {
+    th,
+    td {
+      flex: 1 1 25%;
+    }
+
+    @if (isLoggedIn()) {
+      th:nth-child(5),
+      td:nth-child(5) {
+        display: table-cell;
+        flex: 1 1 25%;
+      }
+
+      th:not(:nth-child(5)),
+      td:not(:nth-child(5)) {
+        flex: 1 1 20%;
+      }
+    }
+  }
+}
+
 @media (max-width: 1024px) {
   .filter-container {
     gap: 10px;
@@ -178,6 +217,7 @@
 
   .media-container {
     flex-direction: column;
+
     .image-content {
       max-width: 100%;
       order: -1;
@@ -209,6 +249,7 @@
 
   .house-table .table-container {
     max-height: 200px;
+
     table {
       min-width: 500px;
     }
@@ -226,6 +267,7 @@
 
   .house-table .table-container {
     max-height: 150px;
+
     table {
       min-width: 400px;
     }
@@ -243,6 +285,7 @@
     padding: 8px 16px;
     font-size: 14px;
     cursor: pointer;
+
     &[disabled] {
       opacity: 0.5;
       cursor: not-allowed;
