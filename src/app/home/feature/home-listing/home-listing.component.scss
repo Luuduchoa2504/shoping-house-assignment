@@ -143,11 +143,8 @@
             color: $white;
             text-align: left;
             font-weight: 500;
-            flex: 1 1 25%;
+            flex: 1 1 25%; // Default 4 columns
             box-sizing: border-box;
-            &:nth-child(5) { // Action column
-              display: none;
-            }
           }
         }
 
@@ -160,15 +157,30 @@
             td {
               padding: 12px;
               color: $text-color;
-              flex: 1 1 25%;
+              flex: 1 1 25%; // Default 4 columns
               box-sizing: border-box;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
-              &:nth-child(5) {
-                display: none;
-              }
             }
+          }
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+          display: none; // Default ẩn Action
+        }
+
+        &.logged-in-table {
+          th:nth-child(5),
+          td:nth-child(5) {
+            display: flex; // Hiển thị khi logged in
+            flex: 1 1 20%; // Adjust cho 5 columns
+          }
+
+          th:not(:nth-child(5)),
+          td:not(:nth-child(5)) {
+            flex: 1 1 20%; // Adjust các cột khác
           }
         }
       }
@@ -182,28 +194,6 @@
   border-radius: 8px;
   color: lighten($text-color, 30%);
   text-align: center;
-}
-
-@media (min-width: 0px) {
-  .house-table .table-container table {
-    th,
-    td {
-      flex: 1 1 25%;
-    }
-
-    @if (isLoggedIn()) {
-      th:nth-child(5),
-      td:nth-child(5) {
-        display: table-cell;
-        flex: 1 1 25%;
-      }
-
-      th:not(:nth-child(5)),
-      td:not(:nth-child(5)) {
-        flex: 1 1 20%;
-      }
-    }
-  }
 }
 
 @media (max-width: 1024px) {

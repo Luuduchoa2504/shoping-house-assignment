@@ -55,7 +55,7 @@
               <div class="house-table">
                 <div class="table-container">
                   @if (filteredHouses().length > 0) {
-                    <table>
+                    <table [ngClass]="{'logged-in-table': isLoggedIn()}">
                       <thead>
                       <tr>
                         <th>House Number</th>
