@@ -3,14 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthJwtService } from './auth-jwt.service';
 import {AuthService} from './auth.service';
+import {environment} from '../../../evironment/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private readonly resourceUrl = 'https://vn-fe-test-api.iwalabs.info';
-  private readonly authToken = 'Aa123456';
+  private readonly resourceUrl = environment.apiUrl;
+  private readonly authToken = environment.authToken;
 
   constructor(
     private http: HttpClient,

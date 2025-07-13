@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/oivan-housing/browser",
+    "public": "dist/oivan-housing/browser/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
