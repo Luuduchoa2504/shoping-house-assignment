@@ -77,8 +77,8 @@ export class StorageService {
   private saveToCookie(state: AppStateData): void {
     const cookieValue = encodeURIComponent(JSON.stringify(state));
     const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + 7);
-    document.cookie = `${this.APP_STATE_KEY}=${cookieValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;  // Removed Secure
+    expiryDate.setDate(expiryDate.getSeconds() + 30);
+    document.cookie = `${this.APP_STATE_KEY}=${cookieValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   }
 
   private getInitialState(): AppStateData {

@@ -38,15 +38,14 @@ export class AuthService implements OnDestroy {
   clearUserInfo(): void {
     this.storageService.clearData('userInfo');
     this.storageService.saveData('isLoggedIn', false);
-    this.storageService.clearData('token');  // Clear token too
+    this.storageService.clearData('token');
   }
 
   private startRefreshTimer(): void {
     this.clearRefreshTimer();
     this.refreshTimer = setTimeout(() => {
-      console.log('Token expired after 5 min; forcing logout');
       this.clearUserInfo();
-    }, 5 * 60 * 1000);
+    }, 30 * 1000);
   }
 
   private clearRefreshTimer(): void {
@@ -57,6 +56,6 @@ export class AuthService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.clearRefreshTimer();  // Cleanup on destroy
+    this.clearRefreshTimer();
   }
 }

@@ -25,7 +25,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
       catchError(err => {
         if (err.status === 400 || err.status === 401) {
           loginService.logout();
-          router.navigate(['/login']);
+          router.navigate(['/signup']);
         }
         return throwError(() => err);
       })
@@ -33,7 +33,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   }
 
   if (!token) {
-    router.navigate(['/login']);
+    router.navigate(['/signup']);
     return throwError(() => new Error('No authentication token available'));
   }
 
@@ -45,7 +45,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     catchError(err => {
       if (err.status === 400 || err.status === 401) {
         loginService.logout();
-        router.navigate(['/login']);
+        router.navigate(['/signup']);
       }
       return throwError(() => err);
     })

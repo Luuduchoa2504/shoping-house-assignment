@@ -55,7 +55,6 @@ export class HeaderComponent {
           if (token) {
             this.error = null;
             this.toastrService.success('You are logged in as Administrator', 'Success');
-            // No navigation needed; state updates reactively
           } else {
             this.error = 'No token received from server.';
           }
@@ -73,9 +72,5 @@ export class HeaderComponent {
   logout() {
     this.authService.clearUserInfo();
     this.router.navigate(['/']);
-  }
-
-  navigateToLogin() {
-    this.router.navigate(['/login']);
   }
 }

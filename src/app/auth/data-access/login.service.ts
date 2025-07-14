@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { AuthJwtService } from './auth-jwt.service';
 import { AuthService } from './auth.service';
 import {environment} from "../../../environments/environment";
 
@@ -14,7 +13,6 @@ export class LoginService {
 
   constructor(
       private http: HttpClient,
-      private authServerProvider: AuthJwtService,
       private authService: AuthService
   ) {}
 
@@ -45,7 +43,6 @@ export class LoginService {
   }
 
   logout() {
-    this.authServerProvider.logout().subscribe();
     this.authService.clearUserInfo();
     this.authService.storageService.clearData('token');
   }

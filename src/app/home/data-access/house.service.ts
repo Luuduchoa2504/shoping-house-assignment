@@ -15,7 +15,7 @@ export class HouseService {
 
 
   getHouseModelsList(): Observable<HouseModel[]> {
-    return this.http.get<any>(`${this.apiUrl}/house_models`).pipe(  // Xóa { headers }
+    return this.http.get<any>(`${this.apiUrl}/house_models`).pipe(
       map(response => {
         return response.data.map((item: any) => {
           return item;
@@ -25,7 +25,7 @@ export class HouseService {
   }
 
   getListHouses(): Observable<House[]> {
-    return this.http.get<any>(`${this.apiUrl}/houses`).pipe(  // Xóa { headers }
+    return this.http.get<any>(`${this.apiUrl}/houses`).pipe(
       map(response => {
         return response.data.map((item: any) => {
           return item;
@@ -35,7 +35,7 @@ export class HouseService {
   }
 
   getHouseDetail(id: string): Observable<House> {
-    return this.http.get<any>(`${this.apiUrl}/houses/${id}`).pipe(  // Xóa { headers }
+    return this.http.get<any>(`${this.apiUrl}/houses/${id}`).pipe(
       map(response => {
         const data = response.data;
         return new House({
@@ -71,7 +71,7 @@ export class HouseService {
         }
       }
     };
-    return this.http.post<any>(`${this.apiUrl}/houses`, body).pipe(  // Xóa { headers }
+    return this.http.post<any>(`${this.apiUrl}/houses`, body).pipe(
       map(response => ({
         id: response.data.id,
         houseNumber: response.data.attributes.house_number,
@@ -103,7 +103,7 @@ export class HouseService {
         }
       }
     };
-    return this.http.patch<any>(`${this.apiUrl}/houses/${house.id}`, body).pipe(  // Xóa { headers }
+    return this.http.patch<any>(`${this.apiUrl}/houses/${house.id}`, body).pipe(
       map(response => ({
         id: response.data.id,
         houseNumber: response.data.attributes.house_number,
