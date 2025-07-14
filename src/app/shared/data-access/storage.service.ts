@@ -22,16 +22,15 @@ export const appStateInitialData: AppStateData = {
   providedIn: 'root',
 })
 export class StorageService {
-  private readonly APP_STATE_KEY = 'APP_STATE';
   private readonly updateData$ = new Subject<AppStateData>();
   private readonly currentVersion = 1;
+  private _state: AppStateData = this.getInitialState();  // In-memory state
 
-  readonly appState = toSignal(this.updateData$.pipe(startWith(this.getInitialState())), {
-    initialValue: this.getInitialState(),
+  readonly appState = toSignal(this.updateData$.pipe(startWith(this._state)), {
+    initialValue: this._state,
   });
 
   constructor() {
-    this.loadFromLocalStorage();
   }
 
   saveData<T extends keyof AppStateData>(key: T, data: AppStateData[T]): void {
@@ -43,28 +42,14 @@ export class StorageService {
   }
 
   private saveAndReturnState<T extends keyof AppStateData>(key: T, data: AppStateData[T]): AppStateData {
-    const currentState = this.appState() || appStateInitialData;
     const newState = {
-      ...currentState,
+      ...this._state,
       [key]: data,
       version: this.currentVersion,
     };
-    localStorage.setItem(this.APP_STATE_KEY, JSON.stringify(newState));
+    this._state = newState;
     this.updateData$.next(newState);
     return newState;
-  }
-
-  private loadFromLocalStorage(): void {
-    const storedState = localStorage.getItem(this.APP_STATE_KEY);
-    if (storedState) {
-      const parsedState = JSON.parse(storedState);
-      if (parsedState.version === this.currentVersion) {
-        this.updateData$.next(parsedState);
-      } else {
-        this.updateData$.next(this.getInitialState());
-        localStorage.removeItem(this.APP_STATE_KEY);
-      }
-    }
   }
 
   private getInitialState(): AppStateData {

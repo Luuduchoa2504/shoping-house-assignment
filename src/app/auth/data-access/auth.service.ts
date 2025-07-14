@@ -1,11 +1,11 @@
-import {Injectable, signal, computed, inject, effect} from '@angular/core';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { StorageService } from '../../shared/data-access/storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private storageService = inject(StorageService);
+  storageService = inject(StorageService);
 
   private userInfoSignal = signal<{ username: string } | undefined>(this.storageService.appState()?.userInfo);
   private isLoggedInSignal = signal<boolean>(this.storageService.appState()?.isLoggedIn || false);

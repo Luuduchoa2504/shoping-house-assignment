@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthJwtService } from './auth-jwt.service';
-import {AuthService} from './auth.service';
-import {environment} from '../../../evironment/environment';
-
+import { AuthService } from './auth.service';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +13,9 @@ export class LoginService {
   private readonly authToken = environment.authToken;
 
   constructor(
-    private http: HttpClient,
-    private authServerProvider: AuthJwtService,
-    private authService: AuthService
+      private http: HttpClient,
+      private authServerProvider: AuthJwtService,
+      private authService: AuthService
   ) {}
 
   login(username: string, password: string): Observable<any> {
@@ -34,25 +33,24 @@ export class LoginService {
       }
     };
     return this.http.post(`${this.resourceUrl}/auth`, body, { headers }).pipe(
-      tap((response: any) => {
-        const token = response?.data?.attributes?.token;
-        if (token) {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('token', token);
-          this.authService.setUserInfo(username);
-        }
-      })
+        tap((response: any) => {
+          const token = response?.data?.attributes?.token;
+          if (token) {
+            this.authService.setUserInfo(username);
+            this.authService.storageService.saveData('isLoggedIn', true);
+            this.authService.storageService.saveData('token', token);
+          }
+        })
     );
   }
 
   logout() {
     this.authServerProvider.logout().subscribe();
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('token');
     this.authService.clearUserInfo();
+    this.authService.storageService.clearData('token');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return this.authService.storageService.appState()?.token ?? null;
   }
 }
