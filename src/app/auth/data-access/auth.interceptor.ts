@@ -6,7 +6,6 @@ import { catchError } from 'rxjs/operators';
 import { LoginService } from './login.service';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-
   const loginService = inject(LoginService);
   const router = inject(Router);
 
@@ -17,6 +16,22 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
 
   const token = loginService.getToken();
 
+  if (req.method === 'GET') {
+    const headers = req.headers.set('Content-Type', 'application/vnd.api+json');
+    if (token) {
+      headers.set('authentication', token);
+    }
+    return next(req.clone({ headers })).pipe(
+      catchError(err => {
+        if (err.status === 400 || err.status === 401) {
+          loginService.logout();
+          router.navigate(['/login']);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
   if (!token) {
     router.navigate(['/login']);
     return throwError(() => new Error('No authentication token available'));
@@ -25,7 +40,6 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   const headers = req.headers
     .set('Content-Type', 'application/vnd.api+json')
     .set('authentication', token);
-
 
   return next(req.clone({ headers })).pipe(
     catchError(err => {

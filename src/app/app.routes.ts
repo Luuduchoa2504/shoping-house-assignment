@@ -7,7 +7,7 @@ export const routes: Routes = [
       m => m.HomeShellModule)
   },
   {
-    path: '',
+    path: 'signup',
     loadChildren: () => import('./auth/shell/auth-shell.module').then(
       m => m.AuthShellModule)
   },

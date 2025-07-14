@@ -47,10 +47,10 @@
     align-items: center;
     gap: 8px;
     width: 100%;
-    flex-wrap: nowrap; /* Prevent wrapping on large screens */
+    flex-wrap: nowrap;
 
     @media (max-width: 1024px) {
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+      flex-wrap: wrap;
     }
   }
 
