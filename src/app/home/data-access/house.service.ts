@@ -1,29 +1,21 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { House, HouseModel } from './models/house.model';
-import {LoginService} from '../../auth/data-access/login.service';
+import { environment } from '../../../evironment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HouseService {
-  private readonly apiUrl = 'https://vn-fe-test-api.iwalabs.info';
+  private readonly apiUrl = environment.apiUrl;
 
-  private loginService = inject(LoginService);
   private http = inject(HttpClient);
 
-  private getHeaders(): HttpHeaders {
-    const token = this.loginService.getToken();
-    return new HttpHeaders({
-      'authentication': token ?? '',
-      'Content-Type': 'application/vnd.api+json'
-    });
-  }
 
   getHouseModelsList(): Observable<HouseModel[]> {
-    return this.http.get<any>(`${this.apiUrl}/house_models`, { headers: this.getHeaders() }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/house_models`).pipe(  // Xóa { headers }
       map(response => {
         return response.data.map((item: any) => {
           return item;
@@ -33,7 +25,7 @@ export class HouseService {
   }
 
   getListHouses(): Observable<House[]> {
-    return this.http.get<any>(`${this.apiUrl}/houses`, { headers: this.getHeaders() }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/houses`).pipe(  // Xóa { headers }
       map(response => {
         return response.data.map((item: any) => {
           return item;
@@ -43,7 +35,7 @@ export class HouseService {
   }
 
   getHouseDetail(id: string): Observable<House> {
-    return this.http.get<any>(`${this.apiUrl}/houses/${id}`, { headers: this.getHeaders() }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/houses/${id}`).pipe(  // Xóa { headers }
       map(response => {
         const data = response.data;
         return new House({
@@ -79,7 +71,7 @@ export class HouseService {
         }
       }
     };
-    return this.http.post<any>(`${this.apiUrl}/houses`, body, { headers: this.getHeaders() }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/houses`, body).pipe(  // Xóa { headers }
       map(response => ({
         id: response.data.id,
         houseNumber: response.data.attributes.house_number,
@@ -111,7 +103,7 @@ export class HouseService {
         }
       }
     };
-    return this.http.patch<any>(`${this.apiUrl}/houses/${house.id}`, body, { headers: this.getHeaders() }).pipe(
+    return this.http.patch<any>(`${this.apiUrl}/houses/${house.id}`, body).pipe(  // Xóa { headers }
       map(response => ({
         id: response.data.id,
         houseNumber: response.data.attributes.house_number,
