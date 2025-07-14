@@ -13,43 +13,21 @@ export class HouseService {
 
   private http = inject(HttpClient);
 
-
   getHouseModelsList(): Observable<HouseModel[]> {
-    return this.http.get<any>(`${this.apiUrl}/house_models`).pipe(
-      map(response => {
-        return response.data.map((item: any) => {
-          return item;
-        });
-      })
+    return this.http.get<{ data: HouseModel[] }>(`${this.apiUrl}/house_models`).pipe(
+      map(response => response.data.map(item => new HouseModel(item)))
     );
   }
 
   getListHouses(): Observable<House[]> {
-    return this.http.get<any>(`${this.apiUrl}/houses`).pipe(
-      map(response => {
-        return response.data.map((item: any) => {
-          return item;
-        });
-      })
+    return this.http.get<{ data: House[] }>(`${this.apiUrl}/houses`).pipe(
+      map(response => response.data.map(item => new House(item)))
     );
   }
 
   getHouseDetail(id: string): Observable<House> {
-    return this.http.get<any>(`${this.apiUrl}/houses/${id}`).pipe(
-      map(response => {
-        const data = response.data;
-        return new House({
-          id: data.id,
-          houseNumber: data.attributes.house_number,
-          blockNumber: data.attributes.block_number,
-          landNumber: data.attributes.land_number,
-          model: data.attributes.model,
-          houseType: data.attributes.house_type,
-          price: data.attributes.price,
-          attributes: data.attributes,
-          links: data.links
-        });
-      })
+    return this.http.get<{ data: House }>(`${this.apiUrl}/houses/${id}`).pipe(
+      map(response => new House(response.data))
     );
   }
 
@@ -71,16 +49,8 @@ export class HouseService {
         }
       }
     };
-    return this.http.post<any>(`${this.apiUrl}/houses`, body).pipe(
-      map(response => ({
-        id: response.data.id,
-        houseNumber: response.data.attributes.house_number,
-        blockNumber: response.data.attributes.block_number,
-        landNumber: response.data.attributes.land_number,
-        model: response.data.attributes.model,
-        houseType: response.data.attributes.house_type,
-        price: response.data.attributes.price
-      }))
+    return this.http.post<{ data: House }>(`${this.apiUrl}/houses`, body).pipe(
+      map(response => new House(response.data))
     );
   }
 
@@ -103,16 +73,8 @@ export class HouseService {
         }
       }
     };
-    return this.http.patch<any>(`${this.apiUrl}/houses/${house.id}`, body).pipe(
-      map(response => ({
-        id: response.data.id,
-        houseNumber: response.data.attributes.house_number,
-        blockNumber: response.data.attributes.block_number,
-        landNumber: response.data.attributes.land_number,
-        model: response.data.attributes.model,
-        houseType: response.data.attributes.house_type,
-        price: response.data.attributes.price
-      }))
+    return this.http.patch<{ data: House }>(`${this.apiUrl}/houses/${house.id}`, body).pipe(
+      map(response => new House(response.data))
     );
   }
 }
